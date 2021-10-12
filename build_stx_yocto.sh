@@ -268,7 +268,7 @@ prepare_workspace () {
     msg_step="Create workspace for the build"
     echo_step_start
 
-    mkdir -p ${PRJ_BUILD_DIR} ${PRJ_BUILD_DIR_ANACONDA} ${PRJ_SHARED_DL_DIR} ${PRJ_SHARED_SS_DIR}
+    mkdir -p ${PRJ_BUILD_DIR} ${SRC_LAYER_DIR} ${PRJ_BUILD_DIR_ANACONDA} ${PRJ_SHARED_DL_DIR} ${PRJ_SHARED_SS_DIR}
 
     echo_info "The following directories are created in your workspace(${WORKSPACE}):"
     echo_info "For all layers source: ${SRC_LAYER_DIR}"
@@ -285,13 +285,12 @@ prepare_src () {
     # Clone the stx-builds layer if it's not already cloned
     # Check if the script is inside the repo
     if cd ${SCRIPTS_DIR} && git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
-        CLONED_SCRIPTS_REPO=`dirname ${SCRIPTS_DIR}`
-        echo_info "Use the cloned stx-builds repo: ${CLONED_SCRIPTS_REPO}"
+        echo_info "Use the cloned stx-builds repo: ${SCRIPTS_DIR}"
         cd ${SRC_LAYER_DIR}
-        ln -sf ${CLONED_SCRIPTS_REPO}
+        ln -sf ${SCRIPTS_DIR}
     else
         echo_info "Cloning stx-builds repo:"
-        cd ${SRC_SCRIPTS_DIR}
+        cd ${SRC_LAYER_DIR}
         clone_update_repo ${SRC_SCRIPTS_BRANCH} ${SRC_SCRIPTS_URL}
     fi
 
