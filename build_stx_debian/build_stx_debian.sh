@@ -34,11 +34,10 @@ TIMESTAMP=`date +"%Y%m%d_%H%M%S"`
 help_info () {
 cat << ENDHELP
 Usage:
-${SCRIPTS_NAME} [-w WORKSPACE_DIR] [-p PARALLEL_BUILD] [-n] [-u] [-h]
+${SCRIPTS_NAME} [-w WORKSPACE_DIR] [-p PARALLEL_BUILD] [-u] [-h]
 where:
     -w WORKSPACE_DIR is the path for the project
     -p PARALLEL_BUILD is the num of paralle build, default is 2
-    -n dry-run only for bitbake
     -h this help info
 examples:
 $0
@@ -80,19 +79,15 @@ run_cmd () {
 # Parse cmd options
 #########################################################################
 
-DRYRUN=""
 STX_PARALLEL="2"
 
-while getopts "w:p:mnh" OPTION; do
+while getopts "w:p:mh" OPTION; do
     case ${OPTION} in
         w)
             WORKSPACE=`readlink -f ${OPTARG}`
             ;;
         p)
             STX_PARALLEL="${OPTARG}"
-            ;;
-        n)
-            DRYRUN="-n"
             ;;
         h)
             help_info
