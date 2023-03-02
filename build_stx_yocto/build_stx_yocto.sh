@@ -41,7 +41,7 @@ SRC_YP_URL="\
     git://git.yoctoproject.org/meta-selinux;commit=HEAD \
     git://git.yoctoproject.org/meta-dpdk;commit=HEAD \
     git://git.yoctoproject.org/meta-anaconda;commit=HEAD \
-    git://github.com/intel-iot-devkit/meta-iot-cloud;commit=HEAD \
+    https://github.com/intel-iot-devkit/meta-iot-cloud.git;commit=HEAD \
 "
 
 SUB_LAYER_META_OE="\
@@ -75,7 +75,8 @@ SUB_LAYER_META_OE_ANACONDA="\
     meta-gnome \
 "
 
-SCRIPTS_DIR=$(dirname $(readlink -f $0))
+SCRIPTS_DIR=$(dirname $(dirname $(readlink -f $0)))
+SCRIPTS_NAME=$(basename $0)
 TIMESTAMP=`date +"%Y%m%d_%H%M%S"`
 
 #########################################################################
@@ -85,7 +86,7 @@ TIMESTAMP=`date +"%Y%m%d_%H%M%S"`
 help_info () {
 cat << ENDHELP
 Usage:
-$(basename $0) [-w WORKSPACE_DIR] [-b BSP] [-n] [-u] [-h] [-r Yes|No] [-e EXTRA_CONF]
+${SCRIPTS_NAME} [-w WORKSPACE_DIR] [-b BSP] [-n] [-u] [-h] [-r Yes|No] [-e EXTRA_CONF]
 where:
     -w WORKSPACE_DIR is the path for the project
     -b BPS is one of supported BSP: "${SUPPORTED_BSP}"
@@ -104,14 +105,14 @@ ENDHELP
 echo_step_start() {
     [ -n "$1" ] && msg_step=$1
     echo "#########################################################################################"
-    echo "## STEP START: ${msg_step}"
+    echo "## ${SCRIPTS_NAME} - STEP START: ${msg_step}"
     echo "#########################################################################################"
 }
 
 echo_step_end() {
     [ -n "$1" ] && msg_step=$1
     echo "#########################################################################################"
-    echo "## STEP END: ${msg_step}"
+    echo "## ${SCRIPTS_NAME} - STEP END: ${msg_step}"
     echo "#########################################################################################"
     echo
 }
@@ -226,7 +227,7 @@ while getopts "w:b:e:r:unh" OPTION; do
             ;;
         u)
             SKIP_UPDATE="No"
-	    ;;
+            ;;
         r)
             check_yn_rm_work ${OPTARG}
             ;;
@@ -246,6 +247,11 @@ if [ -n "${BSP_VALID}" ]; then
     BSP="${BSP_VALID}"
 fi
 
+IMG_ARCH=${BSP}
+if [ "${BSP}" == "intel-corei7-64"  ]; then
+    IMG_ARCH="x86-64"
+fi
+
 #########################################################################
 # Functions for each step
 #########################################################################
@@ -257,18 +263,20 @@ PRJ_BUILD_DIR_ANACONDA=${WORKSPACE}/prj_stx_anaconda
 PRJ_SHARED_DIR=${WORKSPACE}/prj_shared
 PRJ_SHARED_DL_DIR=${WORKSPACE}/prj_shared/downloads
 PRJ_SHARED_SS_DIR=${WORKSPACE}/prj_shared/sstate-cache
-SRC_META_PATCHES=${SRC_SCRIPTS_DIR}/meta-patches/src_stx
-SRC_CONFIGS=${SRC_SCRIPTS_DIR}/configs
+SRC_SCRIPTS=${SRC_SCRIPTS_DIR}/build_stx_yocto
+SRC_META_PATCHES=${SRC_SCRIPTS}/meta-patches/src_stx
+SRC_CONFIGS=${SRC_SCRIPTS}/configs
 IMG_STX=stx-image-aio
 IMG_ANACONDA=stx-image-aio-installer
 ISO_STX=${PRJ_BUILD_DIR}/tmp/deploy/images/${BSP}/${IMG_STX}-${BSP}.iso
 ISO_ANACONDA=${PRJ_BUILD_DIR_ANACONDA}/tmp-glibc/deploy/images/${BSP}/${IMG_ANACONDA}-${BSP}.iso
 
 prepare_workspace () {
-    msg_step="Create workspace for the build"
+    msg_step="Create workspace for the Yocto build"
     echo_step_start
 
-    mkdir -p ${PRJ_BUILD_DIR} ${SRC_LAYER_DIR} ${PRJ_BUILD_DIR_ANACONDA} ${PRJ_SHARED_DL_DIR} ${PRJ_SHARED_SS_DIR}
+    mkdir -p ${PRJ_BUILD_DIR} ${SRC_SCRIPTS_DIR} ${PRJ_BUILD_DIR_ANACONDA} \
+             ${PRJ_SHARED_DL_DIR} ${PRJ_SHARED_SS_DIR}
 
     echo_info "The following directories are created in your workspace(${WORKSPACE}):"
     echo_info "For all layers source: ${SRC_LAYER_DIR}"
@@ -282,12 +290,13 @@ prepare_src () {
     msg_step="Get the source code repos"
     echo_step_start
 
-    # Clone the stx-builds layer if it's not already cloned
+    # Clone the stx-builds repo if it's not already cloned
     # Check if the script is inside the repo
     if cd ${SCRIPTS_DIR} && git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
-        echo_info "Use the cloned stx-builds repo: ${SCRIPTS_DIR}"
+        CLONED_SCRIPTS_REPO=`dirname ${SCRIPTS_DIR}`
+        echo_info "Use the cloned stx-builds repo: ${CLONED_SCRIPTS_REPO}"
         cd ${SRC_LAYER_DIR}
-        ln -sf ${SCRIPTS_DIR}
+        ln -sf ${CLONED_SCRIPTS_REPO}
     else
         echo_info "Cloning stx-builds repo:"
         cd ${SRC_LAYER_DIR}
@@ -308,7 +317,7 @@ prepare_src () {
 
     echo_step_end
 
-# Not andy meta-patch is needed for the time being, but new ones may be needed and added
+# Not any meta-patch is needed for the time being, but new ones may be needed and added
 # sometime in the future, so just leave these code commented out here.
 #    # Apply meta patches
 #    for l in $(ls -1 ${SRC_META_PATCHES}); do
@@ -423,7 +432,7 @@ build_stx_image () {
 
     RUN_CMD="bitbake ${DRYRUN} ${IMG_STX}"
     echo_cmd "Build the ${IMG_STX} image"
-    bitbake ${DRYRUN} ${IMG_STX} 2>&1|tee logs/bitbake_${IMG_STX}_${TIMESTAMP}.log
+    bitbake -k ${DRYRUN} ${IMG_STX} 2>&1|tee logs/bitbake_${IMG_STX}_${TIMESTAMP}.log
 
     echo_step_end
 
@@ -506,7 +515,7 @@ build_anaconda_image () {
     fi
     RUN_CMD="bitbake ${DRYRUN} ${IMG_ANACONDA}"
     echo_cmd "Build the ${IMG_ANACONDA} image"
-    bitbake ${DRYRUN} ${IMG_ANACONDA} 2>&1|tee logs/bitbake_${IMG_ANACONDA}_${TIMESTAMP}.log
+    bitbake -k ${DRYRUN} ${IMG_ANACONDA} 2>&1|tee logs/bitbake_${IMG_ANACONDA}_${TIMESTAMP}.log
 
     echo_step_end
 
