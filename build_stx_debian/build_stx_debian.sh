@@ -27,6 +27,21 @@ SCRIPTS_DIR=$(dirname $(readlink -f $0))
 SCRIPTS_NAME=$(basename $0)
 TIMESTAMP=`date +"%Y%m%d_%H%M%S"`
 
+SRC_FIX_URL="https://github.com/jackiehjm"
+SRC_FIX_BRANCH="jhuang0/20230301-build-arm64"
+SRC_FIX_REPOS="\
+    cgcs-root \
+    stx-tools \
+    stx/integ \
+    stx/utilities \
+    stx/fault \
+    stx/containers \
+    stx/ha \
+    stx/kernel \
+    stx/metal \
+    stx/ansible-playbooks \
+"
+
 #########################################################################
 # Common Functions
 #########################################################################
@@ -266,6 +281,26 @@ prepare_src () {
 
 patch_src () {
     echo_step_start "Patching source codes for stx project"
+
+    for repo in ${SRC_FIX_REPOS}; do
+        if [ $repo = "cgcs-root" ]; then
+	    fix_repo="stx-cgcs-root"
+        else
+            fix_repo="${repo/\//-}"
+        fi
+        if [ -d ${STX_REPO_ROOT}/${repo} ]; then
+            echo_info "Patching for the ${repo}"
+            cd ${STX_REPO_ROOT}/${repo}
+        elif [ -d ${STX_REPO_ROOT}/cgcs-root/${repo} ]; then
+            echo_info "Patching for the cgcs-root/${repo}"
+            cd ${STX_REPO_ROOT}/cgcs-root/${repo}
+        else
+            echo_error "The repo ${repo} is not found!!"
+        fi
+
+        git fetch ${SRC_FIX_URL}/${fix_repo} ${SRC_FIX_BRANCH}
+        git checkout -b ${SRC_FIX_BRANCH} FETCH_HEAD
+    done
 
     STX_BUILDER="${STX_REPO_ROOT}/stx-tools/stx/lib/stx/stx_build.py"
     echo_info "Patching for the ${STX_BUILDER}"
