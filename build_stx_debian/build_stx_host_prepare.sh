@@ -22,7 +22,6 @@ set -e -o pipefail
 # Variables
 #########################################################################
 WORKSPACE=""
-
 SCRIPTS_NAME=$(basename $0)
 
 #########################################################################
@@ -40,21 +39,6 @@ examples:
 $0
 $0 -w workspace_1234
 ENDHELP
-}
-
-echo_step_start() {
-    [ -n "$1" ] && msg_step=$1
-    echo "#########################################################################################"
-    echo "## ${SCRIPTS_NAME} - STEP START: ${msg_step}"
-    echo "#########################################################################################"
-}
-
-echo_step_end() {
-    [ -n "$1" ] && msg_step=$1
-    echo "#########################################################################################"
-    echo "## ${SCRIPTS_NAME} - STEP END: ${msg_step}"
-    echo "#########################################################################################"
-    echo
 }
 
 echo_info () {
@@ -76,9 +60,6 @@ done
 #########################################################################
 # Main process
 #########################################################################
-msg_step="Prepare build directories"
-echo_step_start
-
 echo_info "Install minikube"
 mkdir -p ${WORKSPACE}/dl-tools
 cd ${WORKSPACE}/dl-tools
@@ -94,5 +75,3 @@ sudo mv linux-amd64/helm /usr/local/bin/
 echo_info "Install repo tool"
 sudo wget https://storage.googleapis.com/git-repo-downloads/repo -O /usr/local/bin/repo
 sudo chmod a+x /usr/local/bin/repo
-
-echo_step_end
