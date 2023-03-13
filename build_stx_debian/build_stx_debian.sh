@@ -142,7 +142,8 @@ STX_MANIFEST_URL="https://opendev.org/starlingx/manifest"
 SRC_SCRIPTS_DIR=${STX_SRC_DIR}/stx-builds
 SRC_META_PATCHES=${SRC_SCRIPTS_DIR}/build_stx_debian/meta-patches
 
-ISO_STX_DEB=stx-image-debian-all-x86-64.iso
+ISO_STX_DEB_DEPLOY=starlingx-qemuarm64-cd.iso
+ISO_STX_DEB_OUTPUT=stx-image-debian-all-arm64.iso
 
 prepare_workspace () {
     msg_step="Create workspace for the Debian build"
@@ -405,11 +406,11 @@ build_image () {
     RUN_CMD="stx build image"
     run_cmd "Build ISO image"
 
-    cp -f ${STX_LOCAL_DIR}/deploy/starlingx-intel-x86-64-cd.iso ${STX_PRJ_OUTPUT}/${ISO_STX_DEB}
+    cp -f ${STX_LOCAL_DIR}/deploy/${ISO_STX_DEB_DEPLOY} ${STX_PRJ_OUTPUT}/${ISO_STX_DEB_OUTPUT}
 
     echo_step_end
 
-    echo_info "Build succeeded, you can get the image in ${STX_PRJ_OUTPUT}/${ISO_STX_DEB}"
+    echo_info "Build succeeded, you can get the image in ${STX_PRJ_OUTPUT}/${ISO_STX_DEB_OUTPUT}"
 }
 
 #########################################################################

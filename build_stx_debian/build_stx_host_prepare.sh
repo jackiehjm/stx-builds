@@ -1,7 +1,5 @@
 #!/bin/sh
 #
-# Copyright (C) 2022 Wind River Systems, Inc.
-#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -82,14 +80,14 @@ echo_step_start
 echo_info "Install minikube"
 mkdir -p ${WORKSPACE}/dl-tools
 cd ${WORKSPACE}/dl-tools
-curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-sudo install minikube-linux-amd64 /usr/local/bin/minikube
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-arm64
+sudo install minikube-linux-arm64 /usr/local/bin/minikube
 minikube version
 
 echo_info "Install helm"
-curl -LO https://get.helm.sh/helm-v3.6.2-linux-amd64.tar.gz
-tar xvf helm-v3.6.2-linux-amd64.tar.gz
-sudo mv linux-amd64/helm /usr/local/bin/
+curl -LO https://get.helm.sh/helm-v3.6.2-linux-arm64.tar.gz
+tar xvf helm-v3.6.2-linux-arm64.tar.gz
+sudo mv linux-arm64/helm /usr/local/bin/
 
 echo_info "Install repo tool"
 sudo wget https://storage.googleapis.com/git-repo-downloads/repo -O /usr/local/bin/repo
