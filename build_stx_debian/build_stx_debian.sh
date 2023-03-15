@@ -75,19 +75,48 @@ run_cmd () {
     ${RUN_CMD}
 }
 
+check_valid_branch () {
+    branch="$1"
+    for b in ${STX_SRC_BRANCH_SUPPORTED}; do
+        if [ "${branch}" == "${b}" ]; then
+            BRANCH_VALID="${branch}"
+            break
+        fi
+    done
+    if [ -z "${BRANCH_VALID}" ]; then
+        echo_error "${branch} is not a supported BRANCH, the supported BRANCHs are: ${STX_SRC_BRANCH_SUPPORTED}"
+        exit 1
+    else
+        STX_SRC_BRANCH=${BRANCH_VALID}
+    fi
+}
+
+
 #########################################################################
 # Parse cmd options
 #########################################################################
 
 STX_PARALLEL="2"
 
-while getopts "w:p:mh" OPTION; do
+STX_SRC_BRANCH_SUPPORTED="\
+    master \
+    r/stx.8.0 \
+    WRCP_22.12 \
+"
+STX_SRC_BRANCH="master"
+STX_MANIFEST_URL="https://opendev.org/starlingx/manifest"
+STX_MANIFEST_URL_WRCP="ssh://git@vxgit.wrs.com:7999/cgcs/github.com.stx-staging.stx-manifest.git"
+
+while getopts "w:p:b:h" OPTION; do
     case ${OPTION} in
         w)
             WORKSPACE=`readlink -f ${OPTARG}`
             ;;
         p)
             STX_PARALLEL="${OPTARG}"
+            ;;
+        b)
+            check_valid_branch ${OPTARG}
             ;;
         h)
             help_info
@@ -101,15 +130,16 @@ if [ -z ${WORKSPACE} ]; then
     WORKSPACE=`readlink -f workspace`
 fi
 
+if [[ ${STX_SRC_BRANCH} =~ "WRCP" ]]; then
+    STX_MANIFEST_URL=${STX_MANIFEST_URL_WRCP}
+fi
+
 #########################################################################
 # Functions for each step
 #########################################################################
 
 # "_" can't be used in project name
 PRJ_NAME=prj-stx-deb
-
-# Temporary for master
-STX_SRC_BRANCH="master"
 
 STX_LOCAL_DIR=${WORKSPACE}/localdisk
 STX_LOCAL_SRC_DIR=${STX_LOCAL_DIR}/designer/${USER}/${PRJ_NAME}
@@ -120,7 +150,6 @@ STX_PRJ_OUTPUT=${WORKSPACE}/prj_output
 STX_MIRROR_DIR=${WORKSPACE}/mirrors
 STX_APTLY_DIR=${WORKSPACE}/aptly
 STX_MINIKUBE_HOME=${WORKSPACE}/minikube_home
-STX_MANIFEST_URL="https://opendev.org/starlingx/manifest"
 
 SRC_SCRIPTS_DIR=${STX_SRC_DIR}/stx-builds
 SRC_META_PATCHES=${SRC_SCRIPTS_DIR}/build_stx_debian/meta-patches
