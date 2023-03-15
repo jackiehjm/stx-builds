@@ -21,7 +21,7 @@ set -e -o pipefail
 
 SRC_SCRIPTS_BRANCH="jhuang0/20230301-build-arm64"
 
-SRC_SCRIPTS_URL="https://github.com/jackiehjm/stx-builds"
+SRC_SCRIPTS_URL="https://gitlab.aws-eu-north-1.devstar.cloud/jhuang0/stx-builds.git"
 
 SCRIPTS_DIR=$(dirname $(readlink -f $0))
 SCRIPTS_NAME=$(basename $0)
