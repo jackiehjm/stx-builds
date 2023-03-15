@@ -21,11 +21,22 @@ set -e -o pipefail
 
 SRC_SCRIPTS_BRANCH="master"
 
-SRC_SCRIPTS_URL="https://github.com/jackiehjm/stx-builds"
+SRC_SCRIPTS_URL="https://gitlab.aws-eu-north-1.devstar.cloud/jhuang0/stx-builds.git"
 
 SCRIPTS_DIR=$(dirname $(readlink -f $0))
 SCRIPTS_NAME=$(basename $0)
 TIMESTAMP=`date +"%Y%m%d_%H%M%S"`
+
+STX_PARALLEL="2"
+
+STX_SRC_BRANCH_SUPPORTED="\
+    master \
+    r/stx.8.0 \
+    WRCP_22.12 \
+"
+STX_SRC_BRANCH="master"
+STX_MANIFEST_URL="https://opendev.org/starlingx/manifest"
+STX_MANIFEST_URL_WRCP="ssh://git@vxgit.wrs.com:7999/cgcs/github.com.stx-staging.stx-manifest.git"
 
 #########################################################################
 # Common Functions
@@ -34,10 +45,11 @@ TIMESTAMP=`date +"%Y%m%d_%H%M%S"`
 help_info () {
 cat << ENDHELP
 Usage:
-${SCRIPTS_NAME} [-w WORKSPACE_DIR] [-p PARALLEL_BUILD] [-u] [-h]
+${SCRIPTS_NAME} [-w WORKSPACE_DIR] [-p PARALLEL_BUILD] [-b STX_SRC_BRANCH] [-h]
 where:
     -w WORKSPACE_DIR is the path for the project
     -p PARALLEL_BUILD is the num of paralle build, default is 2
+    -b STX_SRC_BRANCH is the branch for stx repos, default is master
     -h this help info
 examples:
 $0
@@ -96,16 +108,6 @@ check_valid_branch () {
 # Parse cmd options
 #########################################################################
 
-STX_PARALLEL="2"
-
-STX_SRC_BRANCH_SUPPORTED="\
-    master \
-    r/stx.8.0 \
-    WRCP_22.12 \
-"
-STX_SRC_BRANCH="master"
-STX_MANIFEST_URL="https://opendev.org/starlingx/manifest"
-STX_MANIFEST_URL_WRCP="ssh://git@vxgit.wrs.com:7999/cgcs/github.com.stx-staging.stx-manifest.git"
 
 while getopts "w:p:b:h" OPTION; do
     case ${OPTION} in
