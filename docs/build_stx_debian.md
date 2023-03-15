@@ -1,21 +1,19 @@
-# StarlingX Builds
+# StarlingX Debian Builds
 
 [TOC]
 
-This aims to make the StarlingX builds and development more easier.
+This is for StarlingX Debian builds and developments.
 
-## 1. StarlingX Debian Builds
+## 1. Quick start with wrapper script build_stx_debian.sh
 
-### 1.1 Quick start with wrapper script build_stx_debian.sh
-
-#### 1.1.1 Install required packages
+### 1.1 Install required packages
 
 NOTE:
-  * The build system requires a Linux system with Docker and python 3.x installed.
-  * pek-sebuild3 and yow-wrcp-lx can be used directly.
+   * The build system requires a Linux system with Docker and python 3.x installed.
+   * pek-sebuild3 and yow-wrcp-lx can be used directly, please skip this step.
 
 1. Install Docker Engine:
-  * ref: https://docs.docker.com/engine/install/
+   * ref: https://docs.docker.com/engine/install/
 
 2. Add user to docker group
 
@@ -30,7 +28,7 @@ git clone https://gitlab.aws-eu-north-1.devstar.cloud/jhuang0/stx-builds.git
 ./stx-builds/build_stx_debian/build_stx_host_prepare.sh
 ```
 
-#### 1.1.2 Use the script to build
+### 1.2 Use the script to build
 
 ```
 git clone https://gitlab.aws-eu-north-1.devstar.cloud/jhuang0/stx-builds.git
@@ -47,17 +45,13 @@ git clone https://gitlab.aws-eu-north-1.devstar.cloud/jhuang0/stx-builds.git
 ./stx-builds/build_stx_debian/build_stx_debian.sh -w ws-wrcp22.12 -b WRCP_22.12 -p 10
 ```
 
-### 2.2 Detail docs for Debian Build and Developments
-
-For details docs, please refer to [build_stx_debian](./docs/build_stx_debian.md)
-
-## 2. StarlingX CentOS builds
+## 2. Build Tips
 
 TODO
 
-## 3. StarlingX Yocto builds
+## 3. Detail docs for Debian Build and Developments
 
-TODO
-
-
-
+* [StarlingX Debian Build Environment](https://wiki.openstack.org/wiki/StarlingX/DebianBuildEnvironment)
+* [StarlingX Debian Build Structure](https://wiki.openstack.org/wiki/StarlingX/DebianBuildStructure)
+* [WRCP Debian Builds](https://confluence.wrs.com/display/CE/WRCP+Debian+Builds)
+* 
