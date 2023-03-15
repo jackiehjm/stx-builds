@@ -19,7 +19,7 @@ set -e -o pipefail
 # Variables
 #########################################################################
 
-SRC_SCRIPTS_BRANCH="master"
+SRC_SCRIPTS_BRANCH="jhuang0/20230301-build-arm64"
 
 SRC_SCRIPTS_URL="https://github.com/jackiehjm/stx-builds"
 
@@ -125,7 +125,6 @@ fi
 # "_" can't be used in project name
 PRJ_NAME=prj-stx-deb
 
-# Temporary for master
 STX_SRC_BRANCH="master"
 
 STX_LOCAL_DIR=${WORKSPACE}/localdisk
