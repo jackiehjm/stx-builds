@@ -30,6 +30,16 @@ git clone https://gitlab.aws-eu-north-1.devstar.cloud/jhuang0/stx-builds.git
 
 ### 1.2 Use the script to build
 
+* [optional] set proxy before running the script
+
+```
+export http_proxy=http://147.11.252.42:9090
+export https_proxy=http://147.11.252.42:9090
+export no_proxy=localhost,127.0.0.1,10.96.0.0/12,192.168.59.0/24,192.168.49.0/24,192.168.39.0/24,192.168.67.0/24,192.168.49.2
+```
+
+* Get and run the script
+
 ```
 git clone https://gitlab.aws-eu-north-1.devstar.cloud/jhuang0/stx-builds.git
 
@@ -54,4 +64,4 @@ TODO
 * [StarlingX Debian Build Environment](https://wiki.openstack.org/wiki/StarlingX/DebianBuildEnvironment)
 * [StarlingX Debian Build Structure](https://wiki.openstack.org/wiki/StarlingX/DebianBuildStructure)
 * [WRCP Debian Builds](https://confluence.wrs.com/display/CE/WRCP+Debian+Builds)
-* 
+* [WRCP Debian Package Porting Guide](https://confluence.wrs.com/display/CE/Debian+Package+Conversion+Guide)
