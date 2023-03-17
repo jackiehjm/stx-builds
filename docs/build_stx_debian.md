@@ -55,9 +55,73 @@ git clone https://gitlab.aws-eu-north-1.devstar.cloud/jhuang0/stx-builds.git
 ./stx-builds/build_stx_debian/build_stx_debian.sh -w ws-wrcp22.12 -b WRCP_22.12 -p 10
 ```
 
+* How to re-run each steps if the above script fail
+
+```
+# source the env and enter the stx-builder pod
+cd <work_space_dir>
+source env.prj-stx-deb
+cd src/stx-tools/
+source import-stx
+stx shell
+
+# Run the downloader
+downloader -b -s
+
+# Build a specifi package
+build-pkgs -p <pkg_name>
+
+# Build all packages
+build-pkgs -a --parallel <num_parallel_tasks>
+
+# Build image
+build-image
+```
+
 ## 2. Build Tips
 
-TODO
+### 2.1 Known issues and Workarounds
+
+#### 2.1.1 Downloader failed
+
+You may encounter the following downloader failure if there is unexpected network issue:
+
+```
+# e.g.
+2023-03-13 17:46:36,947 - downloader - ERROR: Binary downloader failed
+2023-03-13 17:46:36,947 - downloader - ERROR: Packages failed to download:
+2023-03-13 17:46:36,947 - downloader - ERROR: systemtap-sdt-dev_4.4-2
+```
+
+* Workaround 1: you can try to re-run the downloader
+
+```
+# source the env and enter the stx-builder pod
+cd <work_space_dir>
+source env.prj-stx-deb
+cd src/stx-tools/
+source import-stx
+stx shell
+
+# re-run the downloader
+downloader -b -s
+```
+
+* Workaround 2: try to find the failed packages and download manually
+
+```
+# Find the failed packages on yow-wrcp-lx:/import/mirrors/debian
+# e.g.
+jhuang0@yow-wrcp-lx /import/mirrors/debian $ find . -name systemtap-sdt-dev_4.4-2*
+./debian/ftp.ca.debian.org/debian/pool/main/s/systemtap/systemtap-sdt-dev_4.4-2_amd64.deb
+
+# Then copy the found package to your <work_space_dir>/mirrors
+# e.g.
+scp ./debian/ftp.ca.debian.org/debian/pool/main/s/systemtap/systemtap-sdt-dev_4.4-2_amd64.deb <your_build_host_ip>:<work_space_dir>/mirrors/starlingx/binaries
+```
+
+After downloading all failed packages manually, re-run the downloader as described in Workaround 1.
+
 
 ## 3. Detail docs for Debian Build and Developments
 
