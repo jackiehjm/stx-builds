@@ -75,7 +75,7 @@ SUB_LAYER_META_OE_ANACONDA="\
     meta-gnome \
 "
 
-SCRIPTS_DIR=$(dirname $(dirname $(readlink -f $0)))
+SCRIPTS_DIR=$(dirname $(readlink -f $0))
 SCRIPTS_NAME=$(basename $0)
 TIMESTAMP=`date +"%Y%m%d_%H%M%S"`
 
@@ -275,7 +275,7 @@ prepare_workspace () {
     msg_step="Create workspace for the Yocto build"
     echo_step_start
 
-    mkdir -p ${PRJ_BUILD_DIR} ${SRC_SCRIPTS_DIR} ${PRJ_BUILD_DIR_ANACONDA} \
+    mkdir -p ${PRJ_BUILD_DIR} ${PRJ_BUILD_DIR_ANACONDA} ${SRC_LAYER_DIR}\
              ${PRJ_SHARED_DL_DIR} ${PRJ_SHARED_SS_DIR}
 
     echo_info "The following directories are created in your workspace(${WORKSPACE}):"
