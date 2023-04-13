@@ -220,7 +220,7 @@ source import-stx
 # delete minikube cluster
 ./stx-init-env --nuke
 
-# recreate the cluster with local images
+# recreate the cluster with older image
 export STX_PREBUILT_BUILDER_IMAGE_TAG=master-debian-20230203T015600Z
 ./stx-init-env
 
@@ -241,7 +241,7 @@ source import-stx
 # delete minikube cluster
 ./stx-init-env --nuke
 
-# recreate the cluster with local images
+# recreate the cluster with local rebuild image
 ./stx-init-env --rebuild=lat
 
 # Enter the stx-builder pod
