@@ -202,8 +202,8 @@ export STX_MIRROR_DIR=${STX_MIRROR_DIR}
 export STX_REPO_ROOT=${STX_SRC_DIR}
 #export STX_REPO_ROOT_SUBDIR="localdisk/designer/${USER}/${PRJ_NAME}"
 
-export USER_NAME=${GIT_USER}
-export USER_EMAIL=${GIT_EMAIL}
+export USER_NAME="${GIT_USER}"
+export USER_EMAIL="${GIT_EMAIL}"
 
 # MINIKUBE
 export STX_PLATFORM="minikube"
