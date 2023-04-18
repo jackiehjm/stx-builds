@@ -210,8 +210,15 @@ EOF
 
     source ${WORKSPACE}/${ENV_FILENAME}
 
-    git config --global user.email "${USER_EMAIL}"
-    git config --global user.name "${USER_NAME}"
+    GIT_USER=`git config user.name`
+    GIT_EMAIL=`git config user.email`
+
+    if [ -z "${GIT_USER}" ]; then
+        git config --global user.name "${USER_NAME}"
+    fi
+    if [ -z "${GIT_EMAIL}" ]; then
+        git config --global user.email "${USER_EMAIL}"
+    fi
     git config --global color.ui false
 
     echo_step_end
