@@ -180,6 +180,18 @@ create_env () {
     msg_step="Create env file for the Debian build"
     echo_step_start
 
+    GIT_USER=`git config user.name`
+    GIT_EMAIL=`git config user.email`
+
+    if [ -z "${GIT_USER}" ]; then
+        GIT_USER=${USER}
+        git config --global user.name "${GIT_USER}"
+    fi
+    if [ -z "${GIT_EMAIL}" ]; then
+        GIT_EMAIL=${USER}@windriver.com
+        git config --global user.email "${GIT_EMAIL}"
+    fi
+
     ENV_FILENAME=env.${PRJ_NAME}
 
     cat <<EOF > ${WORKSPACE}/${ENV_FILENAME}
@@ -190,8 +202,8 @@ export STX_MIRROR_DIR=${STX_MIRROR_DIR}
 export STX_REPO_ROOT=${STX_SRC_DIR}
 #export STX_REPO_ROOT_SUBDIR="localdisk/designer/${USER}/${PRJ_NAME}"
 
-export USER_NAME=${USER}
-export USER_EMAIL=${USER}@windriver.com
+export USER_NAME=${GIT_USER}
+export USER_EMAIL=${GIT_EMAIL}
 
 # MINIKUBE
 export STX_PLATFORM="minikube"
@@ -210,15 +222,6 @@ EOF
 
     source ${WORKSPACE}/${ENV_FILENAME}
 
-    GIT_USER=`git config user.name`
-    GIT_EMAIL=`git config user.email`
-
-    if [ -z "${GIT_USER}" ]; then
-        git config --global user.name "${USER_NAME}"
-    fi
-    if [ -z "${GIT_EMAIL}" ]; then
-        git config --global user.email "${USER_EMAIL}"
-    fi
     git config --global color.ui false
 
     echo_step_end
