@@ -261,6 +261,43 @@ minikube -p minikube-<user>-upstream kubectl <subcommand and options>
 minikube -p minikube-jhuang0-upstream kubectl get pods
 ```
 
+#### How to debug with sbuild and chroot
+
+```
+# source the env
+cd <work_space_dir>
+source env.prj-stx-deb
+cd src/stx-tools/
+source import-stx
+
+# Enter the stx-pkgbuilder pod
+stx shell --container pkgbuilder
+
+# [In stx-pkgbuilder] Modify the sbuild.conf to keep the build env when a pkg failed
+# reference: https://manpages.debian.org/testing/sbuild/sbuild.conf.5.en.html
+sed -i 's/always/successful/' /etc/sbuild/sbuild.conf
+# or
+sed -i 's/always/never/' /etc/sbuild/sbuild.conf
+
+# Get the chroot name from the build command for specific pkg:
+grep 'Build command' $STX_BUILD_HOME/localdisk/pkgbuilder.log|grep <pkg_name>
+
+# e.g. for crictl
+jackie@gigabyte-3:~/stx-arm-build-2023/ws-stx-arm64-20230202$ grep 'Build command' $STX_BUILD_HOME/localdisk/pkgbuilder.log|grep crictl
+2023-02-02 13:15:23,385 - DEBUG: Build command: sbuild -d bullseye -j6 -c chroot:bullseye-arm64-jackie-3 --extra-repository='deb [trusted=yes] http://prj-oran-stx-deb-stx-repomgr:80/deb-local-build-3 bullseye main' --build-dir /localdisk/loadbuild/jackie/prj-oran-stx-deb/std/crictl /localdisk/loadbuild/jackie/prj-oran-stx-deb/std/crictl/crictl_1.0-1.stx.3.dsc
+
+# [In stx-pkgbuilder] Enter the sbuild shell to debug
+sbuild-shell <CHROOT_NAME>
+bash
+cd /build/<pkg_build_dir>
+
+# run any steps that previously failed
+```
+
+### 2.3 Tips from ENG
+
+* [Debian Package Tips](https://confluence.wrs.com/display/CE/Debian+Transition#DebianTransition-DebianPackageMigrationExamples/Tips/Tricks)
+
 ## 3. Detail docs for Debian Build and Developments
 
 * [StarlingX Debian Build Environment](https://wiki.openstack.org/wiki/StarlingX/DebianBuildEnvironment)
