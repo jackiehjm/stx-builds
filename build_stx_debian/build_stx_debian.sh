@@ -38,6 +38,12 @@ STX_SRC_BRANCH="master"
 STX_MANIFEST_URL="https://opendev.org/starlingx/manifest"
 STX_MANIFEST_URL_WRCP="ssh://git@vxgit.wrs.com:7999/cgcs/github.com.stx-staging.stx-manifest.git"
 
+STX_ARCH_SUPPORTED="\
+    x86-64 \
+    arm64 \
+"
+STX_ARCH="x86-64"
+
 # Source code fixes for ARM64
 SRC_FIX_URL="https://github.com/jackiehjm"
 SRC_FIX_BRANCH="jhuang0/20230301-build-arm64"
@@ -63,10 +69,11 @@ SDK_URL="http://ala-lpggp5:5088/3_open_source/stx/images-arm64/lat-sdk/lat-sdk-b
 help_info () {
 cat << ENDHELP
 Usage:
-${SCRIPTS_NAME} [-w WORKSPACE_DIR] [-p PARALLEL_BUILD] [-b STX_SRC_BRANCH] [-h]
+${SCRIPTS_NAME} [-w WORKSPACE_DIR] [-p PARALLEL_BUILD] [-a arch] [-b STX_SRC_BRANCH] [-h]
 where:
     -w WORKSPACE_DIR is the path for the project
     -p PARALLEL_BUILD is the num of paralle build, default is 2
+    -a STX_ARCH is the build arch, default is x86-64, only supports: 'x86-64' and 'arm64'
     -b STX_SRC_BRANCH is the branch for stx repos, default is master
     -h this help info
 examples:
@@ -121,19 +128,38 @@ check_valid_branch () {
     fi
 }
 
+check_valid_arch () {
+    arch="$1"
+    for a in ${STX_ARCH_SUPPORTED}; do
+        if [ "${arch}" == "${a}" ]; then
+            ARCH_VALID="${arch}"
+            break
+        fi
+    done
+    if [ -z "${ARCH_VALID}" ]; then
+        echo_error "${arch} is not a supported ARCH, the supported ARCHs are: ${STX_ARCH_SUPPORTED}"
+        exit 1
+    else
+        STX_ARCH=${ARCH_VALID}
+    fi
+}
+
 
 #########################################################################
 # Parse cmd options
 #########################################################################
 
 
-while getopts "w:p:b:h" OPTION; do
+while getopts "w:p:a:b:h" OPTION; do
     case ${OPTION} in
         w)
             WORKSPACE=`readlink -f ${OPTARG}`
             ;;
         p)
             STX_PARALLEL="${OPTARG}"
+            ;;
+        a)
+            check_valid_arch ${OPTARG}
             ;;
         b)
             check_valid_branch ${OPTARG}
@@ -347,7 +373,9 @@ patch_src_arm () {
 patch_src () {
     echo_step_start "Patching source codes for stx project"
 
-    patch_src_arm
+    if [ ${STX_ARCH} = "arm64" ]; then
+        patch_src_arm
+    fi
 
     STX_BUILDER="${STX_REPO_ROOT}/stx-tools/stx/lib/stx/stx_build.py"
     echo_info "Patching for the ${STX_BUILDER}"
@@ -382,6 +410,7 @@ patch_src () {
 }
 
 prepare_lat_sdk () {
+    # This is only needed for ARM64
     echo_step_start "Prepare LAT-SDK"
 
     SDK_DIR=${STX_REPO_ROOT}/stx-tools/stx/toCOPY/lat-sdk/
@@ -426,7 +455,11 @@ build_image () {
     echo_step_start "Build Debian images"
 
     cd ${STX_REPO_ROOT}/stx-tools
-    RUN_CMD="./stx-init-env --rebuild"
+    if [ ${STX_ARCH} = "arm64" ]; then
+        RUN_CMD="./stx-init-env --rebuild"
+    else
+        RUN_CMD="./stx-init-env"
+    fi
     run_cmd "Run stx-init-env script"
 
     stx control status
@@ -465,5 +498,7 @@ prepare_workspace
 create_env
 prepare_src
 init_stx_tool
-prepare_lat_sdk
+if [ ${STX_ARCH} = "arm64" ]; then
+    prepare_lat_sdk
+fi
 build_image
