@@ -200,7 +200,10 @@ STX_MINIKUBE_HOME=${WORKSPACE}/minikube_home
 SRC_SCRIPTS_DIR=${STX_SRC_DIR}/stx-builds
 SRC_META_PATCHES=${SRC_SCRIPTS_DIR}/build_stx_debian/meta-patches
 
-ISO_STX_DEB=stx-image-debian-all-x86-64.iso
+ISO_STX_DEB_X86_DEPLOY=starlingx-intel-x86-64-cd.iso
+ISO_STX_DEB_X86_OUTPUT=stx-image-debian-all-x86-64.iso
+ISO_STX_DEB_ARM_DEPLOY=starlingx-qemuarm64-cd.iso
+ISO_STX_DEB_ARM_OUTPUT=stx-image-debian-all-arm64.iso
 
 prepare_workspace () {
     msg_step="Create workspace for the Debian build"
@@ -483,7 +486,11 @@ build_image () {
     RUN_CMD="stx build image"
     run_cmd "Build ISO image"
 
-    cp -f ${STX_LOCAL_DIR}/deploy/starlingx-intel-x86-64-cd.iso ${STX_PRJ_OUTPUT}/${ISO_STX_DEB}
+    if [ ${STX_ARCH} = "arm64" ]; then
+        cp -f ${STX_LOCAL_DIR}/deploy/${ISO_STX_DEB_ARM_DEPLOY} ${STX_PRJ_OUTPUT}/${ISO_STX_DEB_ARM_OUTPUT}
+    else
+        cp -f ${STX_LOCAL_DIR}/deploy/${ISO_STX_DEB_X86_DEPLOY} ${STX_PRJ_OUTPUT}/${ISO_STX_DEB_X86_OUTPUT}
+    fi
 
     echo_step_end
 

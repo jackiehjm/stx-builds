@@ -1,7 +1,5 @@
 #!/bin/sh
 #
-# Copyright (C) 2022 Wind River Systems, Inc.
-#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -27,6 +25,13 @@ SCRIPTS_NAME=$(basename $0)
 LOCAL_BIN="/usr/local/bin"
 USE_SUDO="sudo"
 
+STX_ARCH_SUPPORTED="\
+    x86-64 \
+    arm64 \
+"
+STX_ARCH="x86-64"
+STX_ARCH_NAME="amd64"
+
 #########################################################################
 # Common Functions
 #########################################################################
@@ -34,9 +39,10 @@ USE_SUDO="sudo"
 help_info () {
 cat << ENDHELP
 Usage:
-${SCRIPTS_NAME} [-w WORKSPACE_DIR] [-h]
+${SCRIPTS_NAME} [-w WORKSPACE_DIR] [-a ARCH] [-l LOCAL_BIN] [-h]
 where:
     -w WORKSPACE_DIR is the path for the builds
+    -a STX_ARCH is the build arch, default is x86-64, only supports: 'x86-64' and 'arm64'
     -l LOCAL_BIN is the path for local bin, default is /usr/local/bin
     -h this help info
 examples:
@@ -49,7 +55,23 @@ echo_info () {
     echo "INFO: $1"
 }
 
-while getopts "w:l:h" OPTION; do
+check_valid_arch () {
+    arch="$1"
+    for a in ${STX_ARCH_SUPPORTED}; do
+        if [ "${arch}" == "${a}" ]; then
+            ARCH_VALID="${arch}"
+            break
+        fi
+    done
+    if [ -z "${ARCH_VALID}" ]; then
+        echo_error "${arch} is not a supported ARCH, the supported ARCHs are: ${STX_ARCH_SUPPORTED}"
+        exit 1
+    else
+        STX_ARCH=${ARCH_VALID}
+    fi
+}
+
+while getopts "w:a:l:h" OPTION; do
     case ${OPTION} in
         w)
             WORKSPACE=`readlink -f ${OPTARG}`
@@ -57,6 +79,9 @@ while getopts "w:l:h" OPTION; do
         l)
             LOCAL_BIN=`readlink -f ${OPTARG}`
 	    ;;
+        a)
+            check_valid_arch ${OPTARG}
+            ;;
         h)
             help_info
             exit
@@ -71,6 +96,15 @@ else
     exit
 fi
 
+if [ ${STX_ARCH} = "arm64" ]; then
+    STX_ARCH_NAME="arm64"
+fi
+DL_MINIKUBE_URL="https://storage.googleapis.com/minikube/releases/latest"
+DL_MINIKUBE="minikube-linux-${STX_ARCH_NAME}"
+DL_HELM_URL="https://get.helm.sh"
+DL_HELM="helm-v3.6.2-linux-${STX_ARCH_NAME}.tar.gz"
+DL_REPO_URL="https://storage.googleapis.com/git-repo-downloads/repo"
+
 #########################################################################
 # Main process
 #########################################################################
@@ -79,20 +113,20 @@ mkdir -p ${WORKSPACE}/dl-tools
 cd ${WORKSPACE}/dl-tools
 
 if [ ! -f ${LOCAL_BIN}/minikube ]; then
-    curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-    ${SUDO} install minikube-linux-amd64 ${LOCAL_BIN}/minikube
+    curl -LO ${DL_MINIKUBE_URL}/${DL_MINIKUBE}
+    ${SUDO} install ${DL_MINIKUBE} ${LOCAL_BIN}/minikube
 fi
 minikube version
 
 echo_info "Install helm"
 if [ ! -f ${LOCAL_BIN}/helm ]; then
-    curl -LO https://get.helm.sh/helm-v3.6.2-linux-amd64.tar.gz
-    tar xvf helm-v3.6.2-linux-amd64.tar.gz
-    ${SUDO} mv linux-amd64/helm ${LOCAL_BIN}/
+    curl -LO ${DL_HELM_URL}/${DL_HELM}
+    tar xvf ${DL_HELM}
+    ${SUDO} mv linux-${STX_ARCH_NAME}/helm ${LOCAL_BIN}/
 fi
 
 echo_info "Install repo tool"
 if [ ! -f ${LOCAL_BIN}/repo ]; then
-    ${SUDO} wget https://storage.googleapis.com/git-repo-downloads/repo -O ${LOCAL_BIN}/repo
+    ${SUDO} wget ${DL_REPO_URL} -O ${LOCAL_BIN}/repo
     ${SUDO} chmod a+x ${LOCAL_BIN}/repo
 fi
