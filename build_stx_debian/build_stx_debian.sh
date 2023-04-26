@@ -54,6 +54,8 @@ SRC_FIX_REPOS="\
     stx/ansible-playbooks \
 "
 
+SDK_URL="http://ala-lpggp5:5088/3_open_source/stx/images-arm64/lat-sdk/lat-sdk-build_20230301/AppSDK.sh"
+
 #########################################################################
 # Common Functions
 #########################################################################
@@ -379,6 +381,18 @@ patch_src () {
     echo_step_end
 }
 
+prepare_lat_sdk () {
+    echo_step_start "Prepare LAT-SDK"
+
+    SDK_DIR=${STX_REPO_ROOT}/stx-tools/stx/toCOPY/lat-sdk/
+    mkdir -p ${SDK_DIR}
+    cd ${SDK_DIR}
+    RUN_CMD="wget ${SDK_URL} -O ${SDK_DIR}/AppSDK.sh"
+    run_cmd "Download the ${SDK_URL} to ${SDK_DIR}"
+
+    echo_step_end
+}
+
 init_stx_tool () {
     echo_step_start "Init stx tool"
 
@@ -412,7 +426,7 @@ build_image () {
     echo_step_start "Build Debian images"
 
     cd ${STX_REPO_ROOT}/stx-tools
-    RUN_CMD="./stx-init-env"
+    RUN_CMD="./stx-init-env --rebuild"
     run_cmd "Run stx-init-env script"
 
     stx control status
@@ -451,4 +465,5 @@ prepare_workspace
 create_env
 prepare_src
 init_stx_tool
+prepare_lat_sdk
 build_image
