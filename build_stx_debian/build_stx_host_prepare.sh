@@ -58,7 +58,7 @@ echo_info () {
 check_valid_arch () {
     arch="$1"
     for a in ${STX_ARCH_SUPPORTED}; do
-        if [ "${arch}" == "${a}" ]; then
+        if [ "${arch}" = "${a}" ]; then
             ARCH_VALID="${arch}"
             break
         fi
