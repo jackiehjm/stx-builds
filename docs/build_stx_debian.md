@@ -10,7 +10,6 @@ This is for StarlingX Debian builds and developments.
 
 NOTE:
    * The build system requires a Linux system with Docker and python 3.x installed.
-   * pek-sebuild3 and yow-wrcp-lx can be used directly, please skip this step.
 
 1. Install Docker Engine:
    * ref: https://docs.docker.com/engine/install/
@@ -24,7 +23,7 @@ sudo usermod -aG docker $(id -un) && newgrp docker
 3. Install helm, minikube and repo
 
 ```
-git clone https://gitlab.aws-eu-north-1.devstar.cloud/jhuang0/stx-builds.git
+git clone https://github.com/jackiehjm/stx-builds.git
 ./stx-builds/build_stx_debian/build_stx_host_prepare.sh
 ```
 
@@ -36,24 +35,30 @@ git clone https://gitlab.aws-eu-north-1.devstar.cloud/jhuang0/stx-builds.git
 # e.g.
 export http_proxy=http://147.11.252.42:9090
 export https_proxy=http://147.11.252.42:9090
-export no_proxy=localhost,127.0.0.1,10.96.0.0/12,192.168.59.0/24,192.168.49.0/24,192.168.39.0/24,192.168.67.0/24,192.168.49.2
+export no_proxy=localhost,127.0.0.1,10.96.0.0/12,192.168.0.0/16
 ```
 
 * Get and run the script
 
 ```
-git clone https://gitlab.aws-eu-north-1.devstar.cloud/jhuang0/stx-builds.git
+git clone https://github.com/jackiehjm/stx-builds.git 
 
-./stx-builds/build_stx_debian/build_stx_debian.sh -w <work_space_dir> -b <stx_branch> -p <parralel_build_num>
+./stx-builds/build_stx_debian/build_stx_debian.sh -w <work_space_dir> -a <arch> -b <stx_branch> -p <parralel_build_num>
 
+# Supported arch: x86-64(default), arm64
+# Note: it only supports native build for each arch, cross build is not supported.
+# 
 # stx_branch is the StarlingX/WRCP repo branch to build, default is "master"
 # supported branches are:
 # - master
 # - r/stx.8.0
-# - WRCP_22.12
+# - WRCP_22.12 -- For WindRiver internal only
 # e.g.
 ./stx-builds/build_stx_debian/build_stx_debian.sh -w ws-stx-master -p 8
 ./stx-builds/build_stx_debian/build_stx_debian.sh -w ws-wrcp22.12 -b WRCP_22.12 -p 10
+
+# build on arm64 server
+./stx-builds/build_stx_debian/build_stx_debian.sh -w ws-stx-8.0 -a arm64 -b r/stx.8.0 -p 8
 ```
 
 * How to re-run each steps if the above script fail
@@ -69,7 +74,7 @@ stx shell
 # Run the downloader
 downloader -b -s
 
-# Build a specifi package
+# Build a specific package
 build-pkgs -p <pkg_name>
 
 # Build all packages
@@ -157,7 +162,10 @@ downloader -b -s
 * Workaround 2: try to find the failed packages and download manually
 
 ```
-# Find the failed packages on yow-wrcp-lx:/import/mirrors/debian
+# Find the failed packages on:
+# https://mirror.starlingx.cengn.ca/mirror/starlingx/release/latest_release/debian/monolithic/inputs/
+# or
+# [WR Internal] Find the failed packages on yow-wrcp-lx:/import/mirrors/debian
 # e.g.
 jhuang0@yow-wrcp-lx /import/mirrors/debian $ find . -name systemtap-sdt-dev_4.4-2*
 ./debian/ftp.ca.debian.org/debian/pool/main/s/systemtap/systemtap-sdt-dev_4.4-2_amd64.deb
@@ -195,7 +203,7 @@ appsdk - DEBUG:  cannot copy extracted data for './usr/lib/x86_64-linux-gnu/libi
   * then re-run build-image
 
 
-#### 2.1.4 Build-image failed because of upstream LAT is in dev [ONLY FOR WRCP 22.12]
+#### 2.1.4 Build-image failed because of upstream LAT is in dev [ONLY FOR r/stx8.0 or WRCP 22.12]
 
 * Example failure
 
