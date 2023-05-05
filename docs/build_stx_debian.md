@@ -24,7 +24,11 @@ sudo usermod -aG docker $(id -un) && newgrp docker
 
 ```
 git clone https://github.com/jackiehjm/stx-builds.git
+
 ./stx-builds/build_stx_debian/build_stx_host_prepare.sh
+
+# For ARM64
+./stx-builds/build_stx_debian/build_stx_host_prepare.sh -a arm64
 ```
 
 ### 1.2 Use the script to build
