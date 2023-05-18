@@ -4,6 +4,10 @@
 
 ## Status 
 
+### 2023-05-15
+
+* User Story: https://storyboard.openstack.org/#!/story/2010739
+
 ### 2023-04-23
 
 * upgrade mlnx userspace pkgs from Babak:
@@ -310,19 +314,19 @@ appsdk --log-dir log genimage lat.yaml
 | 5   | ghcr.io/k8snetworkplumbingwg/multus-cni:v3.9.2  | Y                       |        | NA     |                                                        |
 | 6   | ghcr.io/k8snetworkplumbingwg/sriov-cni:v2.6.3   | N                       | jackie | Done   | [docker.io/stx4arm/sriov-cni][58]                      |
 | 7   | k8s.gcr.io/coredns/coredns:v1.8.6               | N                       |        | todo   | should be supported.<br />need to find the alternative |
-| 8   | k8s.gcr.io/ingress-nginx/controller:v1.1.1      | Y                       |        |        |                                                        |
-| 9   | k8s.gcr.io/kube-apiserver:v1.24.4               | Y                       |        |        |                                                        |
-| 10  | k8s.gcr.io/kube-controller-manager:v1.24.4      | Y                       |        |        |                                                        |
-| 11  | k8s.gcr.io/kube-proxy:v1.24.4                   | Y                       |        |        |                                                        |
-| 12  | k8s.gcr.io/kube-scheduler:v1.24.4               | Y                       |        |        |                                                        |
-| 13  | k8s.gcr.io/pause:3.7                            | Y                       |        |        |                                                        |
-| 14  | quay.io/calico/kube-controllers:v3.24.0         | Y                       |        |        |                                                        |
-| 15  | quay.io/calico/node:v3.24.0                     | Y                       |        |        |                                                        |
-| 16  | quay.io/jetstack/cert-manager-acmesolver:v1.7.1 | Y                       |        |        |                                                        |
-| 17  | quay.io/jetstack/cert-manager-cainjector:v1.7.1 | Y                       |        |        |                                                        |
-| 18  | quay.io/jetstack/cert-manager-controller:v1.7.1 | Y                       |        |        |                                                        |
-| 19  | quay.io/jetstack/cert-manager-ctl:v1.7.1        | Y                       |        |        |                                                        |
-| 20  | gcr.io/kubebuilder/kube-rbac-proxy:v0.11.0      | Y                       |        |        |                                                        |
+| 8   | k8s.gcr.io/ingress-nginx/controller:v1.1.1      | Y                       |        | NA     |                                                        |
+| 9   | k8s.gcr.io/kube-apiserver:v1.24.4               | Y                       |        | NA     |                                                        |
+| 10  | k8s.gcr.io/kube-controller-manager:v1.24.4      | Y                       |        | NA     |                                                        |
+| 11  | k8s.gcr.io/kube-proxy:v1.24.4                   | Y                       |        | NA     |                                                        |
+| 12  | k8s.gcr.io/kube-scheduler:v1.24.4               | Y                       |        | NA     |                                                        |
+| 13  | k8s.gcr.io/pause:3.7                            | Y                       |        | NA     |                                                        |
+| 14  | quay.io/calico/kube-controllers:v3.24.0         | Y                       |        | NA     |                                                        |
+| 15  | quay.io/calico/node:v3.24.0                     | Y                       |        | NA     |                                                        |
+| 16  | quay.io/jetstack/cert-manager-acmesolver:v1.7.1 | Y                       |        | NA     |                                                        |
+| 17  | quay.io/jetstack/cert-manager-cainjector:v1.7.1 | Y                       |        | NA     |                                                        |
+| 18  | quay.io/jetstack/cert-manager-controller:v1.7.1 | Y                       |        | NA     |                                                        |
+| 19  | quay.io/jetstack/cert-manager-ctl:v1.7.1        | Y                       |        | NA     |                                                        |
+| 20  | gcr.io/kubebuilder/kube-rbac-proxy:v0.11.0      | Y                       |        | NA     |                                                        |
 
 #### Pulled but not used image list:
 
@@ -334,9 +338,9 @@ appsdk --log-dir log genimage lat.yaml
 | 4   | quay.io/stackanetes/kubernetes-entrypoint:v0.3.1                  | N             | jackie | Done   | [docker.io/stx4arm/kubernetes-entrypoint][57]    |
 | 5   | ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:v3.5.1   | N             | jackie | Done   | [stx4arm/sriov-network-device-plugin:v3.5.1][59] |
 | 6   | k8s.gcr.io/defaultbackend-amd64:1.5                               | N             | jackie | DOne   | k8s.gcr.io/defaultbackend-arm64                  |
-| 7   | k8s.gcr.io/etcd:3.5.3-0                                           | Y             |        |        |                                                  |
-| 8   | k8s.gcr.io/ingress-nginx/kube-webhook-certgen:v1.1.1              | Y             |        |        |                                                  |
-| 9   | quay.io/calico/cni:v3.24.0                                        | Y             |        |        |                                                  |
+| 7   | k8s.gcr.io/etcd:3.5.3-0                                           | Y             |        | NA     |                                                  |
+| 8   | k8s.gcr.io/ingress-nginx/kube-webhook-certgen:v1.1.1              | Y             |        | NA     |                                                  |
+| 9   | quay.io/calico/cni:v3.24.0                                        | Y             |        | NA     |                                                  |
 | 10  | quay.io/k8scsi/snapshot-controller:v2.0.0-rc2                     | N             |        |        |                                                  |
 
 [12]: https://github.com/jackiehjm/stx-containers/commit/c5363249cca07f76cdd6959d2f8471a7f4739cc9
