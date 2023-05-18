@@ -114,7 +114,7 @@ cd ${WORKSPACE}/dl-tools
 
 if [ ! -f ${LOCAL_BIN}/minikube ]; then
     curl -LO ${DL_MINIKUBE_URL}/${DL_MINIKUBE}
-    ${SUDO} install ${DL_MINIKUBE} ${LOCAL_BIN}/minikube
+    ${USE_SUDO} install ${DL_MINIKUBE} ${LOCAL_BIN}/minikube
 fi
 minikube version
 
@@ -122,11 +122,11 @@ echo_info "Install helm"
 if [ ! -f ${LOCAL_BIN}/helm ]; then
     curl -LO ${DL_HELM_URL}/${DL_HELM}
     tar xvf ${DL_HELM}
-    ${SUDO} mv linux-${STX_ARCH_NAME}/helm ${LOCAL_BIN}/
+    ${USE_SUDO} mv linux-${STX_ARCH_NAME}/helm ${LOCAL_BIN}/
 fi
 
 echo_info "Install repo tool"
 if [ ! -f ${LOCAL_BIN}/repo ]; then
-    ${SUDO} wget ${DL_REPO_URL} -O ${LOCAL_BIN}/repo
-    ${SUDO} chmod a+x ${LOCAL_BIN}/repo
+    ${USE_SUDO} wget ${DL_REPO_URL} -O ${LOCAL_BIN}/repo
+    ${USE_SUDO} chmod a+x ${LOCAL_BIN}/repo
 fi
