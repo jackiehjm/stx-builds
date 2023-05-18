@@ -8,6 +8,39 @@
 
 * User Story: https://storyboard.openstack.org/#!/story/2010739
 
+
+#### Commits for fixes re-work based on stx.8.0
+
+* Fixes and workarounds for stx-tools(20 commits):
+  * https://github.com/jackiehjm/stx-tools/compare/r/stx.8.0...jackiehjm:stx-tools:arm64/20230515-stx80-native
+
+* Fixes and workdournad for cgcs-root/build-tools(3 commits):
+  * https://github.com/jackiehjm/stx-cgcs-root/compare/r/stx.8.0...jackiehjm:stx-cgcs-root:arm64/20230515-stx80-native
+
+* Fixes for packages:
+  * stx-integ(11 commits):
+    * https://github.com/jackiehjm/stx-integ/compare/r/stx.8.0...jackiehjm:stx-integ:arm64/20230515-stx80-native
+  * stx-utilities(1 commit):
+    * https://github.com/jackiehjm/stx-utilities/compare/r/stx.8.0...jackiehjm:stx-utilities:arm64/20230515-stx80-native
+  * stx-fault(1 commit):
+    * https://github.com/jackiehjm/stx-fault/compare/r/stx.8.0...jackiehjm:stx-fault:arm64/20230515-stx80-native
+  * stx-containers(1 commit):
+    * https://github.com/jackiehjm/stx-ha/compare/r/stx.8.0...jackiehjm:stx-ha:arm64/20230515-stx80-native
+  * stx-ha(2 commits):
+    * https://github.com/jackiehjm/stx-ha/compare/r/stx.8.0...jackiehjm:stx-ha:arm64/20230515-stx80-native
+  * stx-kernel(17 commits):
+    * https://github.com/jackiehjm/stx-kernel/compare/r/stx.8.0...jackiehjm:stx-kernel:arm64/20230515-stx80-native
+  * stx-metal(2 commits):
+    * https://github.com/jackiehjm/stx-metal/compare/r/stx.8.0...jackiehjm:stx-metal:arm64/20230515-stx80-native
+  * stx-ansible-playbooks(3 commits):
+    * https://github.com/jackiehjm/stx-ansible-playbooks/compare/r/stx.8.0...jackiehjm:stx-ansible-playbooks:arm64/20230515-stx80-native
+
+* Fixes and workarounds for LAT(2 commits):
+  * https://github.com/jackiehjm/wrl-meta-lat/compare/wr-10.cd-20230210...jackiehjm:wrl-meta-lat:jhuang0/20230301-build-arm64
+  * Built SDK on ARM64 server with the commits:
+    * http://ala-lpggp5:5088/3_open_source/stx/images-arm64/lat-sdk/lat-sdk-build_20230301/wrlinux-graphics-10.23.09.0-glibc-aarch64-qemuarm64-container-base-sdk.sh
+
+
 ### 2023-04-23
 
 * upgrade mlnx userspace pkgs from Babak:
@@ -183,13 +216,13 @@ sudo usermod -aG docker $(id -un) && newgrp docker
 * Install helm, minikube and repo
 
 ```
-git clone https://github.com/jackiehjm/stx-builds.git -b jhuang0/20230426-build-arm64
+git clone https://github.com/jackiehjm/stx-builds.git
 ./stx-builds/build_stx_debian/build_stx_host_prepare.sh -w <work_space_dir> -a arm64
 ```
 
 #### Get the stx-builds script and build
 ```
-git clone https://github.com/jackiehjm/stx-builds.git -b jhuang0/20230426-build-arm64
+git clone https://github.com/jackiehjm/stx-builds.git
 
 ./stx-builds/build_stx_debian/build_stx_debian.sh -w <work_space_dir> -a arm64 -b r/stx.8.0 -p <parralel_build_num>
 ```
