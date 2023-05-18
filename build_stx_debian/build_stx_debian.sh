@@ -46,7 +46,7 @@ STX_ARCH="x86-64"
 
 # Source code fixes for ARM64
 SRC_FIX_URL="https://github.com/jackiehjm"
-SRC_FIX_BRANCH="jhuang0/20230301-build-arm64"
+SRC_FIX_BRANCH="arm64/20230515-stx80-native"
 SRC_FIX_REPOS="\
     cgcs-root \
     stx-tools \
