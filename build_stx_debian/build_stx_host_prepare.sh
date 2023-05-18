@@ -19,8 +19,9 @@
 #########################################################################
 # Variables
 #########################################################################
-WORKSPACE=""
 SCRIPTS_NAME=$(basename $0)
+SCRIPTS_DIR=$(dirname $(readlink -f $0))
+WORKSPACE="${SCRIPTS_DIR}"
 
 LOCAL_BIN="/usr/local/bin"
 USE_SUDO="sudo"
