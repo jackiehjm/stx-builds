@@ -33,6 +33,8 @@ STX_SRC_BRANCH_SUPPORTED="\
     master \
     r/stx.8.0 \
     WRCP_22.12 \
+    WRCP_22.12_PATCHING \
+    WRCP_22.12_PRESTAGING \
 "
 STX_SRC_BRANCH="master"
 STX_MANIFEST_URL="https://opendev.org/starlingx/manifest"
