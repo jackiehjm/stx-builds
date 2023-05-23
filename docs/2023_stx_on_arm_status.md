@@ -2,14 +2,39 @@
 
 [TOC]
 
-## Status 
-
-### 2023-05-15
+## Development summary
 
 * User Story: https://storyboard.openstack.org/#!/story/2010739
 
+* What was done:
+  * Navive build env setup on HPE RL300 Gen11 server (Ampere Altra 1x80 cores)
+  * Packges porting in progress, 28 packages failed:
+    * 14 rt pkgs (includes rt kernel and modules)
+    * 14 std pkgs (includes qemu and some kenel modules)
+  * Built LAT-SDK for ARM64 with qemux86-64 BSP on wrlinux with workarounds.
+  * Built a bootable ISO image (work around by removing failed packages) 
+  * Tested AIO-SX (std kernel) on VM and HPE RL300 Ampere server.
+  * Tested AIO-DX (std kernel) on VM with workaround for PXE install.
 
-#### Commits for fixes re-work based on stx.8.0
+TODO:
+1. Packages porting and fixing
+   * RT kernel
+   * Drivers (kernel modules)
+   * pxe-installer
+   * qemu
+   * secure boot
+   * other features
+2. Container images porting
+3. Build system to support both x86 and arm64 native build and avoid hard-codes.
+4. Build system fixing (build-image is broken, and a manual workaround is needed for now)
+5. DC testing and issue fixing
+6. Others
+
+## Development details
+
+### Commits for fixes and workarounds
+
+Notes: many chages are hard-coded and workarounds for arm64 native builds.
 
 * Fixes and workarounds for stx-tools(20 commits):
   * https://github.com/jackiehjm/stx-tools/compare/r/stx.8.0...jackiehjm:stx-tools:arm64/20230515-stx80-native
@@ -38,145 +63,6 @@
 * Fixes and workarounds for LAT(2 commits):
   * https://github.com/jackiehjm/wrl-meta-lat/compare/wr-10.cd-20230210...jackiehjm:wrl-meta-lat:jhuang0/20230301-build-arm64
   * Built SDK on ARM64 server with the commits:
-    * http://ala-lpggp5:5088/3_open_source/stx/images-arm64/lat-sdk/lat-sdk-build_20230301/wrlinux-graphics-10.23.09.0-glibc-aarch64-qemuarm64-container-base-sdk.sh
-
-
-### 2023-04-23
-
-* upgrade mlnx userspace pkgs from Babak:
-  * https://github.com/jackiehjm/stx-kernel/compare/master-20230202...jackiehjm:stx-kernel:jhuang0/20230423-build-arm64-update-mlnx
-
-* Original ISO from build-image
-  * http://147.11.105.121:5088/3_open_source/stx/images-arm64/build-img-gigabyte_20230423/starlingx-qemuarm64-20230423052819-cd.iso
-* Change the instdev to nvme
-  * http://147.11.105.121:5088/3_open_source/stx/images-arm64/build-img-gigabyte_20230423/output/starlingx-arm64-20230423052819-cd-nvme.iso
-* Bundle the offline docker images:
-  * http://147.11.105.121:5088/3_open_source/stx/images-arm64/build-img-gigabyte_20230423/output/starlingx-arm64-20230423052819-cd-bundle.iso
-* Bundle the offline docker images and change the instdev to nvme:
-  * http://147.11.105.121:5088/3_open_source/stx/images-arm64/build-img-gigabyte_20230423/output/starlingx-arm64-20230423052819-cd-bundle-nvme.iso
-
-### 2023-04-13
-
-* Fix kernel modules: intel-opae-fpga, intel-igb-uio, intel-iavf, intel-i40e
-  * https://github.com/jackiehjm/stx-kernel/compare/master-20230202...jackiehjm:stx-kernel:jhuang0/20230413-build-arm64
-
-### 2023-04-10
-
-* upgrade mlnx-ofa-kernel to 5.8-1.0.1.1
-  * https://github.com/jackiehjm/stx-kernel/compare/master-20230202...jackiehjm:stx-kernel:jhuang0/20230408-build-arm64-update-mlnx
-
-* Original ISO from build-image
-  http://147.11.105.121:5088/3_open_source/stx/images-arm64/build-img-gigabyte_20230410/starlingx-qemuarm64-20230410083210-cd.iso
-
-* Change the instdev to nvme
-  http://147.11.105.121:5088/3_open_source/stx/images-arm64/build-img-gigabyte_20230410/output/starlingx-arm64-20230410083210-cd-nvme.iso
-
-* Bundle the offline docker images:
-  http://147.11.105.121:5088/3_open_source/stx/images-arm64/build-img-gigabyte_20230410/output/starlingx-arm64-20230410083210-cd-bundle.iso
-
-* Bundle the offline docker images and change the instdev to nvme:
-  http://147.11.105.121:5088/3_open_source/stx/images-arm64/build-img-gigabyte_20230410/output/starlingx-arm64-20230410083210-cd-bundle-nvme.iso
-
-### 2023-04-03
-
-* mlnx-ofa-kernel fixed:
-  * https://github.com/jackiehjm/stx-kernel/compare/master-20230202...jackiehjm:stx-kernel:jhuang0/20230315-build-arm64
-
-
-* sriov-device-plugin fixed:
-  * https://github.com/jackiehjm/stx-ansible-playbooks/compare/master-20230202...jackiehjm:stx-ansible-playbooks:jhuang0/20230315-build-arm64
-
-* Use fixed fix branch to avoid the libsss_sudo issue
-```
-cd cgcs-root/stx/stx-puppet
-git checkout -b vr/stx.8.0 vr/stx.8.0
-```
-
-### 2023-03-30
-
-* Multus and sriov-cni fixed:
-  * https://github.com/jackiehjm/stx-ansible-playbooks/compare/master-20230202...jackiehjm:stx-ansible-playbooks:jhuang0/20230315-build-arm64
-
-### 2023-03-15
-
-* Ceph is fixed:
-  * https://github.com/jackiehjm/stx-integ/compare/master-20230202...jackiehjm:stx-integ:jhuang0/20230315-build-arm64
-  * https://github.com/jackiehjm/stx-tools/compare/master-20230202...jackiehjm:stx-tools:jhuang0/20230315-build-arm64
-
-### 2023-03-14
-
-What was done:
-* Build StarlingX master on native ARM64 (not cross build)
-  * Packges removed: 
-    * 14 rt pkgs (includes rt kernel and modules)
-    * 14 std pkgs (includes qemu and some kenel modules)
-* Tested AIO-SX (std kernel) on VM and HPE Ampere based server.
-  * without:
-    * storage(CEPH), Multus and SR-IOV
-    * drivers for MLNX, ice and i40e NICs
-    * Some of the container images are not for arm64
-
-What next:
-* Complete the AIO SX port (storage (CEPH), SR-IOV and Multus)
-* AIO DX and AIO DX + 1
-* Distributed cloud (AIO SX, AIO DX, and AIO DX + 1 as sub-clouds, Central region will be IA server)
-* Expected completion end of H1
-
-TODO:
-1. Packages porting and fixing
-   * Ceph
-   * Multus
-   * RT kernel
-   * Drivers (kernel modules)
-   * SR-IOV
-   * pxe-installer
-   * qemu
-2. Container images porting
-3. Build system fixing (build-image is broken, and a manual workaround is needed for now)
-4. AIO-DX and AIO-DX + 1 testing and issue fixing
-5. DC testing and issue fixing
-
-### 2023-02-22: For MWC
-
-* ISO image: [starlingx-arm64-20230222025752-nvme.iso](http://ala-lpggp5:5088/3_open_source/stx/images-arm64/build-img-gigabyte_20230222/starlingx-arm64-20230222025752-nvme.iso)
-* Instruction: [20230222_stx_arm_iso_readme.md](../2023_MWC_Demo/20230222_stx_arm_iso_readme.md)
-
-Note: 
-* Some of the kernel drivers are missing now: e.g. mlnx-ofed, i40e
-* Need to insert an NIC that available drivers can support: e.g. igb or ixgbe
-* Currently it’s not fully functional, for example, multus and sriov-cni is disabled during bootstrap, and some of the container images still don’t have arm64 version to run.
-
-## Development details
-
-### Commits for fixes and workarounds
-
-* Fixes and workarounds for stx-tools(7 commits):
-  * https://github.com/jackiehjm/stx-tools/compare/master-20230202...jackiehjm:stx-tools:jhuang0/20230301-build-arm64
-
-* Fixes and workdournad for build-tools(3 commits):
-  * https://github.com/jackiehjm/stx-cgcs-root/compare/master-20230213...jackiehjm:stx-cgcs-root:jhuang0/20230301-build-arm64
-
-* Fixes for packages:
-  * stx-integ(11 commits):
-    * https://github.com/jackiehjm/stx-integ/compare/master-20230202...jackiehjm:stx-integ:jhuang0/20230301-build-arm64
-  * stx-utilities(1 commit): 
-    * https://github.com/jackiehjm/stx-utilities/compare/master-20230213...jackiehjm:stx-utilities:jhuang0/20230301-build-arm64
-  * stx-fault(1 commit):
-    * https://github.com/jackiehjm/stx-fault/compare/master-20230213...jackiehjm:stx-fault:jhuang0/20230301-build-arm64
-  * stx-containers(1 commit):
-    * https://github.com/jackiehjm/stx-containers/compare/master-20230213...jackiehjm:stx-containers:jhuang0/20230301-build-arm64
-  * stx-ha(2 commits):
-    * https://github.com/jackiehjm/stx-ha/compare/master-20230213...jackiehjm:stx-ha:jhuang0/20230301-build-arm64
-  * stx-kernel(8 commits):
-    * https://github.com/jackiehjm/stx-kernel/compare/master-20230202...jackiehjm:stx-kernel:jhuang0/20230301-build-arm64 
-  * stx-metal(2 commits):
-    * https://github.com/jackiehjm/stx-metal/compare/master-20230213...jackiehjm:stx-metal:jhuang0/20230301-build-arm64
-  * stx-ansible-playbooks(3 commits):
-    * https://github.com/jackiehjm/stx-ansible-playbooks/compare/master-20230202...jackiehjm:stx-ansible-playbooks:jhuang0/20230301-build-arm64
-
-* Fixes and workarounds for LAT(2 commits):
-  * https://github.com/jackiehjm/wrl-meta-lat/compare/wr-10.cd-20230210...jackiehjm:wrl-meta-lat:jhuang0/20230301-build-arm64
-  * Built SDK on ARM64 server with the commits: 
     * http://ala-lpggp5:5088/3_open_source/stx/images-arm64/lat-sdk/lat-sdk-build_20230301/wrlinux-graphics-10.23.09.0-glibc-aarch64-qemuarm64-container-base-sdk.sh
 
 ### How to build (Native build on ARM server)
@@ -397,3 +283,181 @@ appsdk --log-dir log genimage lat.yaml
 [57]: https://hub.docker.com/repository/docker/stx4arm/kubernetes-entrypoint/general
 [58]: https://hub.docker.com/repository/docker/stx4arm/sriov-cni/general
 [59]: https://hub.docker.com/repository/docker/stx4arm/sriov-network-device-plugin/general
+
+## Status History 
+
+### 2023-05-17
+
+* Discussion on StarlingX non openstack distro meeting: https://etherpad.opendev.org/p/stx-distro-other
+
+### 2023-05-15
+
+* User Story: https://storyboard.openstack.org/#!/story/2010739
+
+
+#### Commits for fixes re-work based on stx.8.0
+
+* Fixes and workarounds for stx-tools(20 commits):
+  * https://github.com/jackiehjm/stx-tools/compare/r/stx.8.0...jackiehjm:stx-tools:arm64/20230515-stx80-native
+
+* Fixes and workdournad for cgcs-root/build-tools(3 commits):
+  * https://github.com/jackiehjm/stx-cgcs-root/compare/r/stx.8.0...jackiehjm:stx-cgcs-root:arm64/20230515-stx80-native
+
+* Fixes for packages:
+  * stx-integ(11 commits):
+    * https://github.com/jackiehjm/stx-integ/compare/r/stx.8.0...jackiehjm:stx-integ:arm64/20230515-stx80-native
+  * stx-utilities(1 commit):
+    * https://github.com/jackiehjm/stx-utilities/compare/r/stx.8.0...jackiehjm:stx-utilities:arm64/20230515-stx80-native
+  * stx-fault(1 commit):
+    * https://github.com/jackiehjm/stx-fault/compare/r/stx.8.0...jackiehjm:stx-fault:arm64/20230515-stx80-native
+  * stx-containers(1 commit):
+    * https://github.com/jackiehjm/stx-ha/compare/r/stx.8.0...jackiehjm:stx-ha:arm64/20230515-stx80-native
+  * stx-ha(2 commits):
+    * https://github.com/jackiehjm/stx-ha/compare/r/stx.8.0...jackiehjm:stx-ha:arm64/20230515-stx80-native
+  * stx-kernel(17 commits):
+    * https://github.com/jackiehjm/stx-kernel/compare/r/stx.8.0...jackiehjm:stx-kernel:arm64/20230515-stx80-native
+  * stx-metal(2 commits):
+    * https://github.com/jackiehjm/stx-metal/compare/r/stx.8.0...jackiehjm:stx-metal:arm64/20230515-stx80-native
+  * stx-ansible-playbooks(3 commits):
+    * https://github.com/jackiehjm/stx-ansible-playbooks/compare/r/stx.8.0...jackiehjm:stx-ansible-playbooks:arm64/20230515-stx80-native
+
+* Fixes and workarounds for LAT(2 commits):
+  * https://github.com/jackiehjm/wrl-meta-lat/compare/wr-10.cd-20230210...jackiehjm:wrl-meta-lat:jhuang0/20230301-build-arm64
+  * Built SDK on ARM64 server with the commits:
+    * http://ala-lpggp5:5088/3_open_source/stx/images-arm64/lat-sdk/lat-sdk-build_20230301/wrlinux-graphics-10.23.09.0-glibc-aarch64-qemuarm64-container-base-sdk.sh
+
+### 2023-04-23
+
+* upgrade mlnx userspace pkgs from Babak:
+  * https://github.com/jackiehjm/stx-kernel/compare/master-20230202...jackiehjm:stx-kernel:jhuang0/20230423-build-arm64-update-mlnx
+
+* Original ISO from build-image
+  * http://147.11.105.121:5088/3_open_source/stx/images-arm64/build-img-gigabyte_20230423/starlingx-qemuarm64-20230423052819-cd.iso
+* Change the instdev to nvme
+  * http://147.11.105.121:5088/3_open_source/stx/images-arm64/build-img-gigabyte_20230423/output/starlingx-arm64-20230423052819-cd-nvme.iso
+* Bundle the offline docker images:
+  * http://147.11.105.121:5088/3_open_source/stx/images-arm64/build-img-gigabyte_20230423/output/starlingx-arm64-20230423052819-cd-bundle.iso
+* Bundle the offline docker images and change the instdev to nvme:
+  * http://147.11.105.121:5088/3_open_source/stx/images-arm64/build-img-gigabyte_20230423/output/starlingx-arm64-20230423052819-cd-bundle-nvme.iso
+
+### 2023-04-13
+
+* Fix kernel modules: intel-opae-fpga, intel-igb-uio, intel-iavf, intel-i40e
+  * https://github.com/jackiehjm/stx-kernel/compare/master-20230202...jackiehjm:stx-kernel:jhuang0/20230413-build-arm64
+
+### 2023-04-10
+
+* upgrade mlnx-ofa-kernel to 5.8-1.0.1.1
+  * https://github.com/jackiehjm/stx-kernel/compare/master-20230202...jackiehjm:stx-kernel:jhuang0/20230408-build-arm64-update-mlnx
+
+* Original ISO from build-image
+  http://147.11.105.121:5088/3_open_source/stx/images-arm64/build-img-gigabyte_20230410/starlingx-qemuarm64-20230410083210-cd.iso
+
+* Change the instdev to nvme
+  http://147.11.105.121:5088/3_open_source/stx/images-arm64/build-img-gigabyte_20230410/output/starlingx-arm64-20230410083210-cd-nvme.iso
+
+* Bundle the offline docker images:
+  http://147.11.105.121:5088/3_open_source/stx/images-arm64/build-img-gigabyte_20230410/output/starlingx-arm64-20230410083210-cd-bundle.iso
+
+* Bundle the offline docker images and change the instdev to nvme:
+  http://147.11.105.121:5088/3_open_source/stx/images-arm64/build-img-gigabyte_20230410/output/starlingx-arm64-20230410083210-cd-bundle-nvme.iso
+
+### 2023-04-03
+
+* mlnx-ofa-kernel fixed:
+  * https://github.com/jackiehjm/stx-kernel/compare/master-20230202...jackiehjm:stx-kernel:jhuang0/20230315-build-arm64
+
+
+* sriov-device-plugin fixed:
+  * https://github.com/jackiehjm/stx-ansible-playbooks/compare/master-20230202...jackiehjm:stx-ansible-playbooks:jhuang0/20230315-build-arm64
+
+* Use fixed fix branch to avoid the libsss_sudo issue
+```
+cd cgcs-root/stx/stx-puppet
+git checkout -b vr/stx.8.0 vr/stx.8.0
+```
+
+### 2023-03-30
+
+* Multus and sriov-cni fixed:
+  * https://github.com/jackiehjm/stx-ansible-playbooks/compare/master-20230202...jackiehjm:stx-ansible-playbooks:jhuang0/20230315-build-arm64
+
+### 2023-03-15
+
+* Ceph is fixed:
+  * https://github.com/jackiehjm/stx-integ/compare/master-20230202...jackiehjm:stx-integ:jhuang0/20230315-build-arm64
+  * https://github.com/jackiehjm/stx-tools/compare/master-20230202...jackiehjm:stx-tools:jhuang0/20230315-build-arm64
+
+### 2023-03-14
+
+What was done:
+* Build StarlingX master on native ARM64 (not cross build)
+  * Packges removed: 
+    * 14 rt pkgs (includes rt kernel and modules)
+    * 14 std pkgs (includes qemu and some kenel modules)
+* Tested AIO-SX (std kernel) on VM and HPE Ampere based server.
+  * without:
+    * storage(CEPH), Multus and SR-IOV
+    * drivers for MLNX, ice and i40e NICs
+    * Some of the container images are not for arm64
+
+What next:
+* Complete the AIO SX port (storage (CEPH), SR-IOV and Multus)
+* AIO DX and AIO DX + 1
+* Distributed cloud (AIO SX, AIO DX, and AIO DX + 1 as sub-clouds, Central region will be IA server)
+* Expected completion end of H1
+
+TODO:
+1. Packages porting and fixing
+   * Ceph
+   * Multus
+   * RT kernel
+   * Drivers (kernel modules)
+   * SR-IOV
+   * pxe-installer
+   * qemu
+2. Container images porting
+3. Build system fixing (build-image is broken, and a manual workaround is needed for now)
+4. AIO-DX and AIO-DX + 1 testing and issue fixing
+5. DC testing and issue fixing
+
+#### Commits for fixes and workarounds
+
+* Fixes and workarounds for stx-tools(7 commits):
+  * https://github.com/jackiehjm/stx-tools/compare/master-20230202...jackiehjm:stx-tools:jhuang0/20230301-build-arm64
+
+* Fixes and workdournad for build-tools(3 commits):
+  * https://github.com/jackiehjm/stx-cgcs-root/compare/master-20230213...jackiehjm:stx-cgcs-root:jhuang0/20230301-build-arm64
+
+* Fixes for packages:
+  * stx-integ(11 commits):
+    * https://github.com/jackiehjm/stx-integ/compare/master-20230202...jackiehjm:stx-integ:jhuang0/20230301-build-arm64
+  * stx-utilities(1 commit): 
+    * https://github.com/jackiehjm/stx-utilities/compare/master-20230213...jackiehjm:stx-utilities:jhuang0/20230301-build-arm64
+  * stx-fault(1 commit):
+    * https://github.com/jackiehjm/stx-fault/compare/master-20230213...jackiehjm:stx-fault:jhuang0/20230301-build-arm64
+  * stx-containers(1 commit):
+    * https://github.com/jackiehjm/stx-containers/compare/master-20230213...jackiehjm:stx-containers:jhuang0/20230301-build-arm64
+  * stx-ha(2 commits):
+    * https://github.com/jackiehjm/stx-ha/compare/master-20230213...jackiehjm:stx-ha:jhuang0/20230301-build-arm64
+  * stx-kernel(8 commits):
+    * https://github.com/jackiehjm/stx-kernel/compare/master-20230202...jackiehjm:stx-kernel:jhuang0/20230301-build-arm64 
+  * stx-metal(2 commits):
+    * https://github.com/jackiehjm/stx-metal/compare/master-20230213...jackiehjm:stx-metal:jhuang0/20230301-build-arm64
+  * stx-ansible-playbooks(3 commits):
+    * https://github.com/jackiehjm/stx-ansible-playbooks/compare/master-20230202...jackiehjm:stx-ansible-playbooks:jhuang0/20230301-build-arm64
+
+* Fixes and workarounds for LAT(2 commits):
+  * https://github.com/jackiehjm/wrl-meta-lat/compare/wr-10.cd-20230210...jackiehjm:wrl-meta-lat:jhuang0/20230301-build-arm64
+  * Built SDK on ARM64 server with the commits: 
+    * http://ala-lpggp5:5088/3_open_source/stx/images-arm64/lat-sdk/lat-sdk-build_20230301/wrlinux-graphics-10.23.09.0-glibc-aarch64-qemuarm64-container-base-sdk.sh
+
+### 2023-02-22: For MWC
+
+* ISO image: [starlingx-arm64-20230222025752-nvme.iso](http://ala-lpggp5:5088/3_open_source/stx/images-arm64/build-img-gigabyte_20230222/starlingx-arm64-20230222025752-nvme.iso)
+* Instruction: [20230222_stx_arm_iso_readme.md](../2023_MWC_Demo/20230222_stx_arm_iso_readme.md)
+
+Note: 
+* Some of the kernel drivers are missing now: e.g. mlnx-ofed, i40e
+* Need to insert an NIC that available drivers can support: e.g. igb or ixgbe
+* Currently it’s not fully functional, for example, multus and sriov-cni is disabled during bootstrap, and some of the container images still don’t have arm64 version to run.
