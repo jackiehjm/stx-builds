@@ -356,7 +356,7 @@ prepare_src () {
 patch_src_arm () {
     for repo in ${SRC_FIX_REPOS}; do
         if [ $repo = "cgcs-root" ]; then
-	    fix_repo="stx-cgcs-root"
+            fix_repo="stx-cgcs-root"
         else
             fix_repo="${repo/\//-}"
         fi
@@ -370,8 +370,9 @@ patch_src_arm () {
             echo_error "The repo ${repo} is not found!!"
         fi
 
-        git fetch ${SRC_FIX_URL}/${fix_repo} ${SRC_FIX_BRANCH}
-        git checkout -b ${SRC_FIX_BRANCH} FETCH_HEAD
+        git remote add hjm-github ${SRC_FIX_URL}/${fix_repo}
+        git fetch hjm-github
+        git checkout -b ${SRC_FIX_BRANCH} hjm-github/${SRC_FIX_BRANCH}
     done
 }
 
