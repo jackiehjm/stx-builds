@@ -62,7 +62,7 @@ SRC_FIX_REPOS="\
     stx/ansible-playbooks \
 "
 
-SDK_URL="http://ala-lpggp5:5088/3_open_source/stx/images-arm64/lat-sdk/lat-sdk-build_20230301/AppSDK.sh"
+SDK_URL="http://ala-lpggp5:5088/3_open_source/stx/images-arm64/lat-sdk/lat-sdk-build_20230525/AppSDK.sh"
 
 #########################################################################
 # Common Functions
