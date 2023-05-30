@@ -60,6 +60,8 @@ SRC_FIX_REPOS="\
     stx/kernel \
     stx/metal \
     stx/ansible-playbooks \
+    stx/config \
+    stx/stx-puppet \
 "
 
 SDK_URL="http://ala-lpggp5:5088/3_open_source/stx/images-arm64/lat-sdk/lat-sdk-build_20230525/AppSDK.sh"
