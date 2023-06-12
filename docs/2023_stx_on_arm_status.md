@@ -2,12 +2,80 @@
 
 [TOC]
 
+## Goals and plan
+
+* StarlingX fully support ARM64 artichecture on selected server (Ampere Altra based)
+
+* What needs to be done:
+  * Enable native build on ARM64 server.
+    * Enhance the build system to support both x86-64 and ARM64.
+    * Re-build LAT-SDK (tools for building image) for ARM64.
+    * Provide ISO image with automated installer as x86-64.
+  * Packages porting for ARM64:
+    * 80+ need source code porting.
+    * 1400+ need to re-build.
+    * Support both std and rt kernel.
+  * Container images re-build for ARM64:
+    * 150+ container images, 30+ need to re-build.
+  * Features adjustment for ARM64:
+    * ISO/PXE installer: ARM64 server doesn't suppport legacy_bios and syslinux, use only grub-efi.
+    * Secure boot: current design is for x86-64 only, need to re-design for ARM64. 
+    * Other features.
+  * StarlingX community contribution:
+    * ARM and Ampere contribute 6 servers to the community: 2 for build, 4 for runtime testing
+    * Contribute all source codes changes: 12+ repos
+    * Pre-built packages push to stalingx mirror (https://mirror.starlingx.cengn.ca/mirror/starlingx/)
+    * LAT-SDK for ARM64 push to starlingx mirror (http://mirror.starlingx.cengn.ca/mirror/lat-sdk/) 
+    * All container images for ARM64 push to dockerhub (https://hub.docker.com/u/starlingx)
+  * Support all StarlingX deplyment configurations:
+    * All-in-one Simplex
+    * All-in-one Duplex
+    * All-in-one Duplex + Workers
+    * Standard with Storage Cluster on Controller Nodes
+    * Standard with Storage Cluster on dedicated Storage Nodes
+    * Distributed Cloud
+
+* Plan and Status:
+  * Phase 1 (2023-01 ~ 2023-02):
+    * [Done] Enable bative build system on HPE RL300 Ampere server (POC level)
+    * [Done] Re-build LAT-SDK for ARM64 (POC level)
+    * [Done] 40+ packages source code porting (POC level)
+    * [Done] 10 container images re-builb for ARM64 (POC level)
+    * [Done] ISO installer adjustment for ARM64 (POC level)
+    * [Done] Provide ISO image for MWC demo (Demo with AIO-SX deployment on a HPE RL300 server)
+  * Phase 2 (2023-03 ~ 2023-05):
+    * [Done] Additional 20+ packages source code porting (POC level)
+    * [Done] Additional 4 containere images re-build (POC level)
+    * [Done] PXE installer adjustment for ARM64 (POC level)
+    * [Done] Verify on VMs: All-in-one Duplex
+    * [Done] Verify on VMs: All-in-one Duplex + Workers 
+    * [Done] StarlingX community contribution kickstart:
+      * Create user story and tasks.
+      * Start the servers contirbution discussion.
+  * Phase 3 (2023-06 ~ 2023-09):
+    * [In-progress] remaining 20+ packages source code porting (POC level)
+    * [In-progress] remaining 10+ container images re-build (POC level)
+    * [In-progress] Verify on VMs: Standard with Storage Cluster on Controller Nodes
+    * [In-progress] Verify on VMs: Standard with Storage Cluster on dedicated Storage Nodes
+    * [In-progress] Verify on VMs: Distributed Cloud
+  * Phase 4 (2023-10 ~ 2024-??):
+    * [Todo] Enhance the build system to support both x86-64 and ARM64.
+    * [Todo] Work with community with all POC level codes and make them product level, review and push to community.
+    * [Todo] Pre-built packages push to stalingx mirror (https://mirror.starlingx.cengn.ca/mirror/starlingx/)
+    * [Todo] LAT-SDK for ARM64 push to starlingx mirror (http://mirror.starlingx.cengn.ca/mirror/lat-sdk/) 
+    * [Todo] All container images for ARM64 push to dockerhub (https://hub.docker.com/u/starlingx)
+    * [Todo] Secure boot and other features re-design or adjustment.
+    * [Todo] Verify all deployment configurations on baremetal servers.
+    * [Todo] contribute 6 servers to the community and setup the CICD workflow.
+
+Notes: POC level means that there are many hardcodes and workarounds
+
 ## Development summary
 
 * User Story: https://storyboard.openstack.org/#!/story/2010739
 
 * What was done:
-  * Navive build env setup on HPE RL300 Gen11 server (Ampere Altra 1x80 cores)
+  * Native build env setup on HPE RL300 Gen11 server (Ampere Altra 1x80 cores)
   * Packges porting in progress, 28 packages failed:
     * 14 rt pkgs (includes rt kernel and modules)
     * 14 std pkgs (includes qemu and some kenel modules)
@@ -39,11 +107,11 @@ Notes: many chages are hard-coded and workarounds for arm64 native builds.
 * Fixes and workarounds for stx-tools(20 commits):
   * https://github.com/jackiehjm/stx-tools/compare/r/stx.8.0...jackiehjm:stx-tools:arm64/20230515-stx80-native
 
-* Fixes and workdournad for cgcs-root/build-tools(3 commits):
+* Fixes and workdournad for cgcs-root/build-tools(4 commits):
   * https://github.com/jackiehjm/stx-cgcs-root/compare/r/stx.8.0...jackiehjm:stx-cgcs-root:arm64/20230515-stx80-native
 
 * Fixes for packages:
-  * stx-integ(11 commits):
+  * stx-integ(16 commits):
     * https://github.com/jackiehjm/stx-integ/compare/r/stx.8.0...jackiehjm:stx-integ:arm64/20230515-stx80-native
   * stx-utilities(1 commit):
     * https://github.com/jackiehjm/stx-utilities/compare/r/stx.8.0...jackiehjm:stx-utilities:arm64/20230515-stx80-native
@@ -55,13 +123,17 @@ Notes: many chages are hard-coded and workarounds for arm64 native builds.
     * https://github.com/jackiehjm/stx-ha/compare/r/stx.8.0...jackiehjm:stx-ha:arm64/20230515-stx80-native
   * stx-kernel(17 commits):
     * https://github.com/jackiehjm/stx-kernel/compare/r/stx.8.0...jackiehjm:stx-kernel:arm64/20230515-stx80-native
-  * stx-metal(2 commits):
+  * stx-metal(5 commits):
     * https://github.com/jackiehjm/stx-metal/compare/r/stx.8.0...jackiehjm:stx-metal:arm64/20230515-stx80-native
-  * stx-ansible-playbooks(3 commits):
+  * stx-ansible-playbooks(6 commits):
     * https://github.com/jackiehjm/stx-ansible-playbooks/compare/r/stx.8.0...jackiehjm:stx-ansible-playbooks:arm64/20230515-stx80-native
+  * stx-config(1 commit):
+    * https://github.com/jackiehjm/stx-config/compare/r/stx.8.0...jackiehjm:stx-config:arm64/20230515-stx80-native
+  * stx-puppet(1 commit):
+    * https://github.com/jackiehjm/stx-puppet/compare/r/stx.8.0...jackiehjm:stx-puppet:arm64/20230515-stx80-native
 
-* Fixes and workarounds for LAT(2 commits):
-  * https://github.com/jackiehjm/wrl-meta-lat/compare/wr-10.cd-20230210...jackiehjm:wrl-meta-lat:jhuang0/20230301-build-arm64
+* Fixes and workarounds for LAT(5 commits):
+  * https://github.com/jackiehjm/wrl-meta-lat/compare/wr-10.cd-20230210...jackiehjm:wrl-meta-lat:arm64/20230515-stx80-native
   * Built SDK on ARM64 server with the commits:
     * http://ala-lpggp5:5088/3_open_source/stx/images-arm64/lat-sdk/lat-sdk-build_20230301/wrlinux-graphics-10.23.09.0-glibc-aarch64-qemuarm64-container-base-sdk.sh
 
@@ -285,6 +357,12 @@ appsdk --log-dir log genimage lat.yaml
 [59]: https://hub.docker.com/repository/docker/stx4arm/sriov-network-device-plugin/general
 
 ## Status History 
+
+### 2023-05-26
+
+* https://github.com/jackiehjm/wrl-meta-lat/compare/wr-10.cd-20230210...jackiehjm:wrl-meta-lat:arm64/20230515-stx80-native
+* https://github.com/jackiehjm/stx-config/compare/r/stx.8.0...jackiehjm:stx-config:arm64/20230515-stx80-native 
+* https://github.com/jackiehjm/stx-puppet/compare/r/stx.8.0...jackiehjm:stx-puppet:arm64/20230515-stx80-native
 
 ### 2023-05-17
 
