@@ -361,7 +361,7 @@ patch_src_arm () {
         if [ $repo = "cgcs-root" ]; then
             fix_repo="stx-cgcs-root"
         elif [ $repo = "stx/stx-puppet" ]; then
-	    fix_repo=${repo}
+	    fix_repo="stx-puppet"
         else
             fix_repo="${repo/\//-}"
         fi
