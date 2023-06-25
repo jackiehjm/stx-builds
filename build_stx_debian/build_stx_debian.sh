@@ -52,6 +52,7 @@ SRC_FIX_BRANCH="arm64/20230515-stx80-native"
 SRC_FIX_REPOS="\
     cgcs-root \
     stx-tools \
+    stx-puppet \
     stx/integ \
     stx/utilities \
     stx/fault \
@@ -61,7 +62,6 @@ SRC_FIX_REPOS="\
     stx/metal \
     stx/ansible-playbooks \
     stx/config \
-    stx/stx-puppet \
     stx/nginx-ingress-controller-armada-app \
 "
 
