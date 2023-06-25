@@ -52,7 +52,7 @@ SRC_FIX_BRANCH="arm64/20230515-stx80-native"
 SRC_FIX_REPOS="\
     cgcs-root \
     stx-tools \
-    stx-puppet \
+    stx/stx-puppet \
     stx/integ \
     stx/utilities \
     stx/fault \
@@ -360,6 +360,8 @@ patch_src_arm () {
     for repo in ${SRC_FIX_REPOS}; do
         if [ $repo = "cgcs-root" ]; then
             fix_repo="stx-cgcs-root"
+        elif [ $repo = "stx/stx-puppet" ]; then
+	    fix_repo=${repo}
         else
             fix_repo="${repo/\//-}"
         fi
