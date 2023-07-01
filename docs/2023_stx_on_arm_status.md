@@ -68,60 +68,60 @@
 
 ### Phase 1 (2023-01 ~ 2023-02):
     
-    * [Done] Enable bative build system on HPE RL300 Ampere server (POC level)
-    * [Done] Re-build LAT-SDK for ARM64 (POC level)
-    * [Done] 40+ packages source code porting (POC level)
-    * [Done] 10 container images re-built for ARM64 (POC level)
-    * [Done] ISO installer adjustment for ARM64 (POC level)
-    * [Done] Provide ISO image for MWC demo (Demo with AIO-SX deployment on a HPE RL300 server)
+* [Done] Enable bative build system on HPE RL300 Ampere server (POC level)
+* [Done] Re-build LAT-SDK for ARM64 (POC level)
+* [Done] 40+ packages source code porting (POC level)
+* [Done] 10 container images re-built for ARM64 (POC level)
+* [Done] ISO installer adjustment for ARM64 (POC level)
+* [Done] Provide ISO image for MWC demo (Demo with AIO-SX deployment on a HPE RL300 server)
 
 Known issues and limitations:
-    * Lack of RT kernel (for lowlatency profile)
-    * Lack of kernel modules: mlnx-ofed-kernel, i40e, ice, iqvlinux, qat
-    * Lack of Ceph
-    * Lack of qemu
-    * Lack of secure boot feature
-    * build-image needs manual workaroud
+* Lack of RT kernel (for lowlatency profile)
+* Lack of kernel modules: mlnx-ofed-kernel, i40e, ice, iqvlinux, qat
+* Lack of Ceph
+* Lack of qemu
+* Lack of secure boot feature
+* build-image needs manual workaroud
 
 ### Phase 2 (2023-03 ~ 2023-06):
 
-    * [Done] Additional 20+ packages source code porting (POC level)
-    * [Done] Additional 4 containere images re-build (POC level)
-    * [Done] PXE installer adjustment for ARM64 (POC level)
-    * [Done] Deployment verification.
-      * AIO-SX: Bare metal and VM
-      * AIO-DX: Bare metal and VM
-      * AIO-DX + worker: Bare metal and VM
-      * STD (2+2): VM
-      * STD (2+2+2): VM
-      * DC (AIO-DX for Central + 2 sub-cloud with AIO-SX): VM
-    * [Done] StarlingX community contribution kickstart:
-      * Create user story and tasks.
-      * Start the servers contirbution discussion.
+* [Done] Additional 20+ packages source code porting (POC level)
+* [Done] Additional 4 containere images re-build (POC level)
+* [Done] PXE installer adjustment for ARM64 (POC level)
+* [Done] Deployment verification.
+  * AIO-SX: Bare metal and VM
+  * AIO-DX: Bare metal and VM
+  * AIO-DX + worker: Bare metal and VM
+  * STD (2+2): VM
+  * STD (2+2+2): VM
+  * DC (AIO-DX for Central + 2 sub-cloud with AIO-SX): VM
+* [Done] StarlingX community contribution kickstart:
+  * Create user story and tasks.
+  * Start the servers contirbution discussion.
   
 Known issues and limitations:
-    * Lack of RT kernel (for lowlatency profile)
-    * Lack of kernel modules: ice, iqvlinux, qat
-    * Lack of qemu
-    * Lack of secure boot feature
+* Lack of RT kernel (for lowlatency profile)
+* Lack of kernel modules: ice, iqvlinux, qat
+* Lack of qemu
+* Lack of secure boot feature
 
 ### Phase 3 (2023-07 ~ 2023-12):
 
-    * [In-progress] remaining packages source code porting: RT kernel, ice, iqvlinux, qemu, qat
-    * [Todo] Deployment verification.
-      * AIO-SX(lowlatency): Bare metal and VM
-      * AIO-DX(lowlatency): Bare metal and VM
-      * AIO-DX(lowlatency) + worker: Bare metal and VM
-      * STD (2+1): Bare metal
-      * DC (AIO-DX for Central + 2 sub-cloud with AIO-SX): Bare metal
-    * [Todo] Enhance the build system to support both x86-64 and ARM64.
-    * [Todo] Work with community with all POC level codes and make them product level, review and push to community.
-    * [Todo] Pre-built packages push to stalingx mirror (https://mirror.starlingx.cengn.ca/mirror/starlingx/)
-    * [Todo] LAT-SDK for ARM64 push to starlingx mirror (http://mirror.starlingx.cengn.ca/mirror/lat-sdk/) 
-    * [Todo] All container images for ARM64 push to dockerhub (https://hub.docker.com/u/starlingx)
-    * [Todo] Secure boot and other features re-design or adjustment.
-    * [Todo] Verify all deployment configurations on baremetal servers.
-    * [Todo] contribute 6 servers to the community and setup the CICD workflow.
+* [In-progress] remaining packages source code porting: RT kernel, ice, iqvlinux, qemu, qat
+* [Todo] Deployment verification.
+  * AIO-SX(lowlatency): Bare metal and VM
+  * AIO-DX(lowlatency): Bare metal and VM
+  * AIO-DX(lowlatency) + worker: Bare metal and VM
+  * STD (2+1): Bare metal
+  * DC (AIO-DX for Central + 2 sub-cloud with AIO-SX): Bare metal
+* [Todo] Enhance the build system to support both x86-64 and ARM64.
+* [Todo] Work with community with all POC level codes and make them product level, review and push to community.
+* [Todo] Pre-built packages push to stalingx mirror (https://mirror.starlingx.cengn.ca/mirror/starlingx/)
+* [Todo] LAT-SDK for ARM64 push to starlingx mirror (http://mirror.starlingx.cengn.ca/mirror/lat-sdk/) 
+* [Todo] All container images for ARM64 push to dockerhub (https://hub.docker.com/u/starlingx)
+* [Todo] Secure boot and other features re-design or adjustment.
+* [Todo] Verify all deployment configurations on baremetal servers.
+* [Todo] contribute 6 servers to the community and setup the CICD workflow.
 
 Notes: POC level means that there are many hardcodes and workarounds, not good for upstream
 
