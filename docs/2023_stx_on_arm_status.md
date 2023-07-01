@@ -2,7 +2,7 @@
 
 [TOC]
 
-## Goals and plan
+## Goals (What needs to be done?)
 
 * StarlingX fully support ARM64 artichecture on selected server (Ampere Altra based)
 
@@ -23,7 +23,7 @@
     * Other features.
   * StarlingX community contribution:
     * ARM and Ampere contribute 6 servers to the community: 2 for build, 4 for runtime testing
-    * Contribute all source codes changes: 12+ repos
+    * Contribute all source codes changes: 15+ repos
     * Pre-built packages push to stalingx mirror (https://mirror.starlingx.cengn.ca/mirror/starlingx/)
     * LAT-SDK for ARM64 push to starlingx mirror (http://mirror.starlingx.cengn.ca/mirror/lat-sdk/) 
     * All container images for ARM64 push to dockerhub (https://hub.docker.com/u/starlingx)
@@ -35,30 +35,85 @@
     * Standard with Storage Cluster on dedicated Storage Nodes
     * Distributed Cloud
 
-* Plan and Status:
-  * Phase 1 (2023-01 ~ 2023-02):
+## Overall status (What was done and what’s next?)
+
+* What was done by 30/06/2023
+  * [Done] Build StarlingX 8 on native ARM (not cross build).
+  * [90% Done] Packages and container images porting.
+    * Failed pkg: RT kernel, ice modules, iqvlinux, qemu, qat
+    * Skipped feature: secure boot
+  * [Done] Deliveries: ISOs and offline container images
+    * Drop 1: at the end of Feb for MWC demo
+    * Drop 2: at the end of Apr for Fujitsu (Export review completed)
+    * Drop 3: at the end of Jun
+  * [Done] Deployment verification.
+    * AIO-SX: Bare metal and VM
+    * AIO-DX: Bare metal and VM
+    * AIO-DX + worker: Bare metal and VM
+    * STD (2+2): VM
+    * STD (2+2+2): VM
+    * DC (AIO-DX for Central + 2 sub-cloud with AIO-SX): VM
+
+* What next
+  * Remaining packages porting:
+    * pkgs: RT kernel, ice modules, iqvlinux, qemu, qat
+    * feature: secure boot
+  * Deployment verification for RT kernel (lowlatency profile)
+  * Make all sources codes product level
+  * Enhance the build system to support both x86-64 and ARM64.
+  * Source codes rebase to StarlingX master and upstream the contribution
+
+## Detail Plan and Status (What was done and what’s next?)
+
+
+### Phase 1 (2023-01 ~ 2023-02):
+    
     * [Done] Enable bative build system on HPE RL300 Ampere server (POC level)
     * [Done] Re-build LAT-SDK for ARM64 (POC level)
     * [Done] 40+ packages source code porting (POC level)
-    * [Done] 10 container images re-builb for ARM64 (POC level)
+    * [Done] 10 container images re-built for ARM64 (POC level)
     * [Done] ISO installer adjustment for ARM64 (POC level)
     * [Done] Provide ISO image for MWC demo (Demo with AIO-SX deployment on a HPE RL300 server)
-  * Phase 2 (2023-03 ~ 2023-05):
+
+Known issues and limitations:
+    * Lack of RT kernel (for lowlatency profile)
+    * Lack of kernel modules: mlnx-ofed-kernel, i40e, ice, iqvlinux, qat
+    * Lack of Ceph
+    * Lack of qemu
+    * Lack of secure boot feature
+    * build-image needs manual workaroud
+
+### Phase 2 (2023-03 ~ 2023-06):
+
     * [Done] Additional 20+ packages source code porting (POC level)
     * [Done] Additional 4 containere images re-build (POC level)
     * [Done] PXE installer adjustment for ARM64 (POC level)
-    * [Done] Verify on VMs: All-in-one Duplex
-    * [Done] Verify on VMs: All-in-one Duplex + Workers 
+    * [Done] Deployment verification.
+      * AIO-SX: Bare metal and VM
+      * AIO-DX: Bare metal and VM
+      * AIO-DX + worker: Bare metal and VM
+      * STD (2+2): VM
+      * STD (2+2+2): VM
+      * DC (AIO-DX for Central + 2 sub-cloud with AIO-SX): VM
     * [Done] StarlingX community contribution kickstart:
       * Create user story and tasks.
       * Start the servers contirbution discussion.
-  * Phase 3 (2023-06 ~ 2023-09):
-    * [In-progress] remaining 20+ packages source code porting (POC level)
-    * [In-progress] remaining 10+ container images re-build (POC level)
-    * [In-progress] Verify on VMs: Standard with Storage Cluster on Controller Nodes
-    * [In-progress] Verify on VMs: Standard with Storage Cluster on dedicated Storage Nodes
-    * [In-progress] Verify on VMs: Distributed Cloud
-  * Phase 4 (2023-10 ~ 2024-??):
+  
+Known issues and limitations:
+    * Lack of RT kernel (for lowlatency profile)
+    * Lack of kernel modules: ice, iqvlinux, qat
+    * Lack of qemu
+    * Lack of secure boot feature
+
+### Phase 3 (2023-07 ~ 2023-12):
+
+    * [In-progress] remaining packages source code porting: RT kernel, ice, iqvlinux, qemu, qat
+    * [Todo] Deployment verification.
+      * AIO-SX(lowlatency): Bare metal and VM
+      * AIO-DX(lowlatency): Bare metal and VM
+      * AIO-DX(lowlatency) + worker: Bare metal and VM
+      * STD (2+1): Bare metal
+      * DC (AIO-DX for Central + 2 sub-cloud with AIO-SX): Bare metal
     * [Todo] Enhance the build system to support both x86-64 and ARM64.
     * [Todo] Work with community with all POC level codes and make them product level, review and push to community.
     * [Todo] Pre-built packages push to stalingx mirror (https://mirror.starlingx.cengn.ca/mirror/starlingx/)
@@ -68,7 +123,7 @@
     * [Todo] Verify all deployment configurations on baremetal servers.
     * [Todo] contribute 6 servers to the community and setup the CICD workflow.
 
-Notes: POC level means that there are many hardcodes and workarounds
+Notes: POC level means that there are many hardcodes and workarounds, not good for upstream
 
 ## Development summary
 
@@ -81,22 +136,24 @@ Notes: POC level means that there are many hardcodes and workarounds
     * 14 std pkgs (includes qemu and some kenel modules)
   * Built LAT-SDK for ARM64 with qemux86-64 BSP on wrlinux with workarounds.
   * Built a bootable ISO image (work around by removing failed packages) 
-  * Tested AIO-SX (std kernel) on VM and HPE RL300 Ampere server.
-  * Tested AIO-DX (std kernel) on VM with workaround for PXE install.
+  * Deployment verification.
+    * AIO-SX: Bare metal and VM
+    * AIO-DX: Bare metal and VM
+    * AIO-DX + worker: Bare metal and VM
+    * STD (2+2): VM
+    * STD (2+2+2): VM
+    * DC (AIO-DX for Central + 2 sub-cloud with AIO-SX): VM
 
 TODO:
 1. Packages porting and fixing
    * RT kernel
-   * Drivers (kernel modules)
-   * pxe-installer
+   * Kernel modules: ice modules, iqvlinux, qat
    * qemu
    * secure boot
    * other features
 2. Container images porting
 3. Build system to support both x86 and arm64 native build and avoid hard-codes.
-4. Build system fixing (build-image is broken, and a manual workaround is needed for now)
-5. DC testing and issue fixing
-6. Others
+6. Others unpredicted issues
 
 ## Development details
 
@@ -131,6 +188,8 @@ Notes: many chages are hard-coded and workarounds for arm64 native builds.
     * https://github.com/jackiehjm/stx-config/compare/r/stx.8.0...jackiehjm:stx-config:arm64/20230515-stx80-native
   * stx-puppet(1 commit):
     * https://github.com/jackiehjm/stx-puppet/compare/r/stx.8.0...jackiehjm:stx-puppet:arm64/20230515-stx80-native
+  * stx-nginx-ingress-controller-armada-app(1 commit):
+    * https://github.com/jackiehjm/stx-nginx-ingress-controller-armada-app/compare/r/stx.8.0...jackiehjm:stx-nginx-ingress-controller-armada-app:arm64/20230515-stx80-native
 
 * Fixes and workarounds for LAT(5 commits):
   * https://github.com/jackiehjm/wrl-meta-lat/compare/wr-10.cd-20230210...jackiehjm:wrl-meta-lat:arm64/20230515-stx80-native
@@ -236,7 +295,6 @@ appsdk --log-dir log genimage lat.yaml
 | 27  | STD    | kubernetes-1.23.1                   | jackie | [Fixed][25] |                                                    |
 | 28  | STD    | kubernetes-1.24.4                   | jackie | [Fixed][25] |                                                    |
 | 29  | STD    | kubectl-cert-manager                | jackie | [Fixed][29] |                                                    |
-| 30  | STD    | kpatch                              | litao  | removed     | Out of scope[arm64 not supported][52]              |
 | 31  | STD    | qemu                                | jackie | removed     | Should be able to remove                           |
 | 32  | STD    | bnxt-en                             | jackie | removed     |                                                    |
 | 33  | STD    | i40e                                | jackie | Fixed       |                                                    |
@@ -251,7 +309,6 @@ appsdk --log-dir log genimage lat.yaml
 | 42  | STD    | mlnx-ofed-kernel                    | jackie | Fixed       |                                                    |
 | 43  | STD    | qat1.7.l                            | jackie | removed     |                                                    |
 | 44  | STD    | linux                               | jackie | [Fixed][44] |                                                    |
-| 45  | STD    | kpatch-prebuilt                     | litao  | removed     | Out of scope[arm64 not supported][52]              |
 | 46  | STD    | pxe-network-installer               | jackie | [Fixed][46] |                                                    |
 | 47  | STD    | mtce                                | jackie | Fixed       | Pass after 13 fixed                                |
 | 48  | STD    | mtce-common                         | jackie | Fixed       | Pass after 13 fixed                                |
@@ -277,19 +334,18 @@ appsdk --log-dir log genimage lat.yaml
 | 68  | STD    | stx-vault-helm                      | jackie | Fixed       | Pass after 22, 24 fixed                            |
 | 69  | STD    | vault-helm                          | jackie | Fixed       | Pass after 22, 24 fixed                            |
 | 70  | RT     | bnxt-en                             | jackie | Removed     |                                                    |
-| 71  | RT     | i40e                                | jackie | Removed     |                                                    |
-| 72  | RT     | i40e-cvl-2.54                       | jackie | Removed     |                                                    |
-| 73  | RT     | iavf                                | jackie | Removed     |                                                    |
-| 74  | RT     | iavf-cvl-2.54                       | jackie | Removed     |                                                    |
+| 71  | RT     | i40e                                | jackie | Fixed       |                                                    |
+| 72  | RT     | i40e-cvl-2.54                       | jackie | Fixed       |                                                    |
+| 73  | RT     | iavf                                | jackie | Fixed       |                                                    |
+| 74  | RT     | iavf-cvl-2.54                       | jackie | Fixed       |                                                    |
 | 75  | RT     | ice                                 | jackie | Removed     |                                                    |
 | 76  | RT     | ice-cvl-2.54                        | jackie | Removed     |                                                    |
-| 77  | RT     | igb-uio                             | jackie | Removed     |                                                    |
-| 78  | RT     | kmod-opae-fpga-driver               | jackie | Removed     |                                                    |
+| 77  | RT     | igb-uio                             | jackie | Fixed       |                                                    |
+| 78  | RT     | kmod-opae-fpga-driver               | jackie | Fixed       |                                                    |
 | 79  | RT     | iqvlinux                            | jackie | Removed     |                                                    |
-| 80  | RT     | mlnx-ofed-kernel                    | jackie | Removed     |                                                    |
+| 80  | RT     | mlnx-ofed-kernel                    | jackie | Fixed       |                                                    |
 | 81  | RT     | qat1.7.l                            | jackie | Removed     |                                                    |
-| 82  | RT     | linux-rt                            | jackie | Removed     |                                                    |
-| 83  | RT     | kpatch-prebuilt                     | jackie | Removed     |                                                    |
+| 82  | RT     | linux-rt                            | jackie | Fixed       | Fixed after upgrade to 5.10.177                    |
 
 
 ### Container images porting
@@ -328,7 +384,7 @@ appsdk --log-dir log genimage lat.yaml
 | 3   | docker.io/wind-river/dm-monitor:WRCP_22.12-v1.0.0                 | N             |        |        |                                                  |
 | 4   | quay.io/stackanetes/kubernetes-entrypoint:v0.3.1                  | N             | jackie | Done   | [docker.io/stx4arm/kubernetes-entrypoint][57]    |
 | 5   | ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:v3.5.1   | N             | jackie | Done   | [stx4arm/sriov-network-device-plugin:v3.5.1][59] |
-| 6   | k8s.gcr.io/defaultbackend-amd64:1.5                               | N             | jackie | DOne   | k8s.gcr.io/defaultbackend-arm64                  |
+| 6   | k8s.gcr.io/defaultbackend-amd64:1.5                               | N             | jackie | Done   | k8s.gcr.io/defaultbackend-arm64                  |
 | 7   | k8s.gcr.io/etcd:3.5.3-0                                           | Y             |        | NA     |                                                  |
 | 8   | k8s.gcr.io/ingress-nginx/kube-webhook-certgen:v1.1.1              | Y             |        | NA     |                                                  |
 | 9   | quay.io/calico/cni:v3.24.0                                        | Y             |        | NA     |                                                  |
