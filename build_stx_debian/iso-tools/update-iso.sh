@@ -218,6 +218,8 @@ function set_timeout {
 declare INPUT_ISO=
 declare OUTPUT_ISO=
 declare ADDON=
+declare KS=
+declare IMG=
 declare -a PARAMS
 declare DEFAULT_LABEL=
 declare DEFAULT_GRUB_ENTRY=
@@ -227,8 +229,8 @@ declare GRUB_TIMEOUT=-1
 declare VERBOSE=false
 
 script=$(basename "$0")
-OPTS=$(getopt -o a:d:hi:m:o:p:t:v \
-                --long addon:,default:,help,input:,mount:,output:,param:,timeout:,verbose \
+OPTS=$(getopt -o a:k:I:d:hi:m:o:p:t:v \
+                --long addon:,kickstart:,image:,default:,help,input:,mount:,output:,param:,timeout:,verbose \
                 -n "${script}" -- "$@")
 if [ $? != 0 ]; then
     echo "Failed parsing options." >&2
@@ -262,6 +264,14 @@ while true; do
             ;;
         -a|--addon)
             ADDON="${2}"
+            shift 2
+            ;;
+        -k|--kickstart)
+            KS="${2}"
+            shift 2
+            ;;
+        -I|--image)
+            IMG="${2}"
             shift 2
             ;;
         -p|--param)
@@ -379,6 +389,14 @@ if [ -n "${ADDON}" ]; then
     cp "${ADDON}" "${BUILDDIR}"/ks-addon.cfg
     if [ $? -ne 0 ]; then
         elog "Failed to copy ${ADDON}"
+    fi
+fi
+
+if [ -n "${IMG}" ]; then
+    ilog "adding ${IMG} to ${BUILDDIR}"
+    cp "${IMG}" "${BUILDDIR}"
+    if [ $? -ne 0 ]; then
+        elog "Failed to copy ${IMG}"
     fi
 fi
 
