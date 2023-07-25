@@ -37,28 +37,39 @@
 
 ## Overall status (What was done and what’s next?)
 
-* What was done by 30/06/2023
+* What was done by 25/07/2023
   * [Done] Build StarlingX 8 on native ARM (not cross build).
-  * [90% Done] Packages and container images porting.
-    * Failed pkg: RT kernel, ice modules, iqvlinux, qemu, qat
+  * [96% Done] Packages and container images porting.
+    * Failed pkg: ice modules, iqvlinux, qemu, qat
     * Skipped feature: secure boot
   * [Done] Deliveries: ISOs and offline container images
     * Drop 1: at the end of Feb for MWC demo
+      * Based on stx-8.0
+      * AIO-SX without ceph, multus and SRIOV
     * Drop 2: at the end of Apr for Fujitsu (Export review completed)
+      * Based on stx-8.0
+      * AIO-SX, AIO-DX
     * Drop 3: at the end of Jun
+      * Based on stx-8.0
+      * AIO-SX, AIO-DX + worker, STD (2+2+2), DC
+    * Drop 4: at the end of July
+      * Based on stx master 20230625
+      * [Both STD and RT kernel] AIO-SX, AIO-DX + worker, STD (2+2+2), DC 
   * [Done] Deployment verification.
     * AIO-SX: Bare metal and VM
+    * AIO-SX(LL): Bare metal and VM
     * AIO-DX: Bare metal and VM
+    * AIO-DX(LL): Bare metal and VM
     * AIO-DX + worker: Bare metal and VM
     * STD (2+2): VM
     * STD (2+2+2): VM
     * DC (AIO-DX for Central + 2 sub-cloud with AIO-SX): VM
+    * DC (AIO-DX-LL for Central + 2 sub-cloud with AIO-SX-LL): VM
 
 * What next
   * Remaining packages porting:
-    * pkgs: RT kernel, ice modules, iqvlinux, qemu, qat
+    * pkgs: ice modules, iqvlinux, qemu, qat
     * feature: secure boot
-  * Deployment verification for RT kernel (lowlatency profile)
   * Make all sources codes product level
   * Enhance the build system to support both x86-64 and ARM64.
   * Source codes rebase to StarlingX master and upstream the contribution
@@ -107,14 +118,16 @@ Known issues and limitations:
 
 ### Phase 3 (2023-07 ~ 2023-12):
 
-* [In-progress] remaining packages source code porting: RT kernel, ice, iqvlinux, qemu, qat
-* [Todo] Deployment verification.
+* [Done] remaining packages source code porting: RT kernel
+* [In-progress] remaining packages source code porting: ice, iqvlinux, qemu, qat
+* [Done] Deployment verification.
   * AIO-SX(lowlatency): Bare metal and VM
   * AIO-DX(lowlatency): Bare metal and VM
   * AIO-DX(lowlatency) + worker: Bare metal and VM
   * STD (2+1): Bare metal
-  * DC (AIO-DX for Central + 2 sub-cloud with AIO-SX): Bare metal
-* [Todo] Enhance the build system to support both x86-64 and ARM64.
+  * DC (AIO-DX for Central + 2 sub-cloud with AIO-SX): VM
+  * DC (AIO-DX-LL for Central + 2 sub-cloud with AIO-SX-LL): VM
+* [In-Progress] Enhance the build system to support both x86-64 and ARM64.
 * [Todo] Work with community with all POC level codes and make them product level, review and push to community.
 * [Todo] Pre-built packages push to stalingx mirror (https://mirror.starlingx.cengn.ca/mirror/starlingx/)
 * [Todo] LAT-SDK for ARM64 push to starlingx mirror (http://mirror.starlingx.cengn.ca/mirror/lat-sdk/) 
@@ -129,70 +142,72 @@ Notes: POC level means that there are many hardcodes and workarounds, not good f
 
 * User Story: https://storyboard.openstack.org/#!/story/2010739
 
-* What was done:
-  * Native build env setup on HPE RL300 Gen11 server (Ampere Altra 1x80 cores)
-  * Packges porting in progress, 28 packages failed:
-    * 14 rt pkgs (includes rt kernel and modules)
-    * 14 std pkgs (includes qemu and some kenel modules)
-  * Built LAT-SDK for ARM64 with qemux86-64 BSP on wrlinux with workarounds.
-  * Built a bootable ISO image (work around by removing failed packages) 
-  * Deployment verification.
-    * AIO-SX: Bare metal and VM
-    * AIO-DX: Bare metal and VM
-    * AIO-DX + worker: Bare metal and VM
-    * STD (2+2): VM
-    * STD (2+2+2): VM
-    * DC (AIO-DX for Central + 2 sub-cloud with AIO-SX): VM
+* Porting:
+  * Almost completed.
+  * Rebased all to master 20230625
+  * RT kernel works after rebase
+  * Only few kenel modules that might not be supported on ARM
+  * OPAE-SDK: for Intel FPGA only
+  * PCM: for Intel only
+  * qemu: I know that it will be upgrade to newer version, so I will do that after the upgrading complete
 
-TODO:
-1. Packages porting and fixing
-   * RT kernel
-   * Kernel modules: ice modules, iqvlinux, qat
-   * qemu
-   * secure boot
-   * other features
-2. Container images porting
-3. Build system to support both x86 and arm64 native build and avoid hard-codes.
-6. Others unpredicted issues
+* Implementation Design:
+  * Part 1: for most of the pkgs
+    * Fix the deb rules to support multiarch:
+      * e.g. replace hardcoded arch string with variable DEB_HOST_ARCH
+  * Part 2: for package list file, e.g. debian_pkg_dirs, debian_iso_image.inc, base-bullseye.lst
+    * Need to add arch specific lists
+  * part 3: build-tools to support multiarch, add logic to remove the hardcodes
+  * part 4: ISO image only support EFI mode, no lagacy mode (remove syslinux)
+  * part 5: secure boot, disable for now, need help from security expert.
+  * part 6: LAT-SDK: need to add logic to remove the hardcodes and support both x86 and arm64
+  * part 7: container-images: some images only have x86 version, need to re-build for arm64 and push to differnet place, how to handle different images url
+
+* CICD:
+  * how/who to setup CICD pipe line after the servers are ready
 
 ## Development details
 
 ### Commits for fixes and workarounds
 
+* RR for part1: https://review.opendev.org/q/topic:arm64%252F20230620-stx-master-native
+
 Notes: many chages are hard-coded and workarounds for arm64 native builds.
 
-* Fixes and workarounds for stx-tools(20 commits):
-  * https://github.com/jackiehjm/stx-tools/compare/r/stx.8.0...jackiehjm:stx-tools:arm64/20230515-stx80-native
+* Fixes and workarounds for stx-tools(22 commits):
+  * https://github.com/starlingx/tools/compare/master...jackiehjm:stx-tools:arm64/20230620-stx-master-native
 
 * Fixes and workdournad for cgcs-root/build-tools(4 commits):
-  * https://github.com/jackiehjm/stx-cgcs-root/compare/r/stx.8.0...jackiehjm:stx-cgcs-root:arm64/20230515-stx80-native
+  * https://github.com/starlingx/root/compare/master...jackiehjm:stx-cgcs-root:arm64/20230620-stx-master-native
 
 * Fixes for packages:
-  * stx-integ(16 commits):
-    * https://github.com/jackiehjm/stx-integ/compare/r/stx.8.0...jackiehjm:stx-integ:arm64/20230515-stx80-native
+  * stx-integ(14 commits):
+    * https://github.com/starlingx/integ/compare/master...jackiehjm:stx-integ:arm64/20230620-stx-master-native
   * stx-utilities(1 commit):
-    * https://github.com/jackiehjm/stx-utilities/compare/r/stx.8.0...jackiehjm:stx-utilities:arm64/20230515-stx80-native
+    * https://github.com/starlingx/utilities/compare/master...jackiehjm:stx-utilities:arm64/20230620-stx-master-native
   * stx-fault(1 commit):
-    * https://github.com/jackiehjm/stx-fault/compare/r/stx.8.0...jackiehjm:stx-fault:arm64/20230515-stx80-native
+    * https://github.com/starlingx/fault/compare/master...jackiehjm:stx-fault:arm64/20230620-stx-master-native
   * stx-containers(1 commit):
-    * https://github.com/jackiehjm/stx-ha/compare/r/stx.8.0...jackiehjm:stx-ha:arm64/20230515-stx80-native
+    * https://github.com/starlingx/containers/compare/master...jackiehjm:stx-containers:arm64/20230620-stx-master-native
   * stx-ha(2 commits):
-    * https://github.com/jackiehjm/stx-ha/compare/r/stx.8.0...jackiehjm:stx-ha:arm64/20230515-stx80-native
-  * stx-kernel(17 commits):
-    * https://github.com/jackiehjm/stx-kernel/compare/r/stx.8.0...jackiehjm:stx-kernel:arm64/20230515-stx80-native
-  * stx-metal(5 commits):
-    * https://github.com/jackiehjm/stx-metal/compare/r/stx.8.0...jackiehjm:stx-metal:arm64/20230515-stx80-native
+    * https://github.com/starlingx/ha/compare/master...jackiehjm:stx-ha:arm64/20230620-stx-master-native
+  * stx-kernel(19 commits):
+    * https://github.com/starlingx/kernel/compare/master...jackiehjm:stx-kernel:arm64/20230620-stx-master-native
+  * stx-metal(6 commits):
+    * https://github.com/starlingx/metal/compare/master...jackiehjm:stx-metal:arm64/20230620-stx-master-native
   * stx-ansible-playbooks(6 commits):
-    * https://github.com/jackiehjm/stx-ansible-playbooks/compare/r/stx.8.0...jackiehjm:stx-ansible-playbooks:arm64/20230515-stx80-native
+    * https://github.com/starlingx/ansible-playbooks/compare/master...jackiehjm:stx-ansible-playbooks:arm64/20230620-stx-master-native
   * stx-config(1 commit):
-    * https://github.com/jackiehjm/stx-config/compare/r/stx.8.0...jackiehjm:stx-config:arm64/20230515-stx80-native
+    * https://github.com/starlingx/config/compare/master...jackiehjm:stx-config:arm64/20230620-stx-master-native
   * stx-puppet(1 commit):
-    * https://github.com/jackiehjm/stx-puppet/compare/r/stx.8.0...jackiehjm:stx-puppet:arm64/20230515-stx80-native
+    * https://github.com/starlingx/stx-puppet/compare/master...jackiehjm:stx-puppet:arm64/20230620-stx-master-native
   * stx-nginx-ingress-controller-armada-app(1 commit):
-    * https://github.com/jackiehjm/stx-nginx-ingress-controller-armada-app/compare/r/stx.8.0...jackiehjm:stx-nginx-ingress-controller-armada-app:arm64/20230515-stx80-native
+    * https://github.com/starlingx/nginx-ingress-controller-armada-app/compare/master...jackiehjm:stx-nginx-ingress-controller-armada-app:arm64/20230620-stx-master-native
+  * stx-app-istio
+    * https://github.com/jackiehjm/stx-app-istio/compare/master...arm64/20230620-stx-master-native
 
 * Fixes and workarounds for LAT(5 commits):
-  * https://github.com/jackiehjm/wrl-meta-lat/compare/wr-10.cd-20230210...jackiehjm:wrl-meta-lat:arm64/20230515-stx80-native
+  * https://github.com/jackiehjm/wrl-meta-lat/compare/wr-10.cd-20230210...jackiehjm:wrl-meta-lat:arm64/20230620-stx-master-native
   * Built SDK on ARM64 server with the commits:
     * http://ala-lpggp5:5088/3_open_source/stx/images-arm64/lat-sdk/lat-sdk-build_20230301/wrlinux-graphics-10.23.09.0-glibc-aarch64-qemuarm64-container-base-sdk.sh
 
@@ -241,23 +256,7 @@ git clone https://github.com/jackiehjm/stx-builds.git
 ```
 git clone https://github.com/jackiehjm/stx-builds.git
 
-./stx-builds/build_stx_debian/build_stx_debian.sh -w <work_space_dir> -a arm64 -b r/stx.8.0 -p <parralel_build_num>
-```
-
-The build-image will always fail, do the following workaround after build-image fails:
-
-```
-cd <work_space_dir>
-source env.prj-stx-deb
-cd src/stx-tools
-source import-stx
-
-stx shell --container lat
-
-# inside the LAT pod
-cd /localdisk
-. /opt/LAT/SDK/environment-setup-cortexa57-wrs-linux
-appsdk --log-dir log genimage lat.yaml
+./stx-builds/build_stx_debian/build_stx_debian.sh -w <work_space_dir> -a arm64 -p <parralel_build_num>
 ```
 
 ### Packages porting
