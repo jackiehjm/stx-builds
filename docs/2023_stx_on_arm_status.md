@@ -37,10 +37,10 @@
 
 ## Overall status (What was done and what’s next?)
 
-* What was done by 25/07/2023
+* What was done by 2023-08-02
   * [Done] Build StarlingX 8 on native ARM (not cross build).
-  * [96% Done] Packages and container images porting.
-    * Failed pkg: ice modules, iqvlinux, qemu, qat
+  * [95% Done] Packages and container images porting.
+    * Failed pkg: ice modules, qemu
     * Skipped feature: secure boot
   * [Done] Deliveries: ISOs and offline container images
     * Drop 1: at the end of Feb for MWC demo
@@ -67,15 +67,18 @@
     * DC (AIO-DX-LL for Central + 2 sub-cloud with AIO-SX-LL): VM
 
 * What next
-  * Remaining packages porting:
-    * pkgs: ice modules, iqvlinux, qemu, qat
-    * feature: secure boot
-  * Make all sources codes product level
-  * Enhance the build system to support both x86-64 and ARM64.
-  * Source codes rebase to StarlingX master and upstream the contribution
+  * [In-Progress] (2023-07 ~ 2023-08) Enhance the build system to support both x86-64 and ARM64.
+  * [In-Progress] (2023-08) Write StarlingX specifications (HLD) for ARM64 implementations.
+  * [In-Progress] (2023-08 ~ 2023-10) Work with community with all POC level codes and make them product level, review and push to community.
+  * [In-Progress] (2023-07 ~ 2023-12) contribute 6 servers to the community and setup the CICD workflow.
+  * [Todo] (2023-10 ~ 2023-12) Pre-built packages push to stalingx mirror (https://mirror.starlingx.cengn.ca/mirror/starlingx/)
+  * [Todo] (2023-10 ~ 2023-12) LAT-SDK for ARM64 push to starlingx mirror (http://mirror.starlingx.cengn.ca/mirror/lat-sdk/) 
+  * [Todo] (2023-10 ~ 2023-12) All container images for ARM64 push to dockerhub (https://hub.docker.com/u/starlingx)
+  * [Todo] (2023-10 ~ 2023-12) DOC: provide documentaions about StarlingX on ARM.
+  * [todo] (2023-10 ~ 2023-12) remaining packages source code porting: ice, qemu
+  * [Todo] (2023-12 or 2024) Secure boot and other features re-design or adjustment.
 
 ## Detail Plan and Status (What was done and what’s next?)
-
 
 ### Phase 1 (2023-01 ~ 2023-02):
     
@@ -116,27 +119,39 @@ Known issues and limitations:
 * Lack of qemu
 * Lack of secure boot feature
 
+Notes: POC level means that there are many hardcodes and workarounds, not good for upstream
+
 ### Phase 3 (2023-07 ~ 2023-12):
 
-* [Done] remaining packages source code porting: RT kernel
-* [In-progress] remaining packages source code porting: ice, iqvlinux, qemu, qat
-* [Done] Deployment verification.
+* [Done] (by the end of 2023-07) remaining packages source code porting: RT kernel
+* [Done] (by the end of 2023-07) Deployment verification.
   * AIO-SX(lowlatency): Bare metal and VM
   * AIO-DX(lowlatency): Bare metal and VM
   * AIO-DX(lowlatency) + worker: Bare metal and VM
   * STD (2+1): Bare metal
   * DC (AIO-DX for Central + 2 sub-cloud with AIO-SX): VM
   * DC (AIO-DX-LL for Central + 2 sub-cloud with AIO-SX-LL): VM
-* [In-Progress] Enhance the build system to support both x86-64 and ARM64.
-* [Todo] Work with community with all POC level codes and make them product level, review and push to community.
-* [Todo] Pre-built packages push to stalingx mirror (https://mirror.starlingx.cengn.ca/mirror/starlingx/)
-* [Todo] LAT-SDK for ARM64 push to starlingx mirror (http://mirror.starlingx.cengn.ca/mirror/lat-sdk/) 
-* [Todo] All container images for ARM64 push to dockerhub (https://hub.docker.com/u/starlingx)
-* [Todo] Secure boot and other features re-design or adjustment.
-* [Todo] Verify all deployment configurations on baremetal servers.
-* [Todo] contribute 6 servers to the community and setup the CICD workflow.
+* [In-Progress] (2023-07 ~ 2023-08) Enhance the build system to support both x86-64 and ARM64.
+* [In-Progress] (2023-08) Write StarlingX specifications (HLD) for ARM64 implementations.
+* [In-Progress] (2023-08 ~ 2023-10) Work with community with all POC level codes and make them product level, review and push to community.
+* [In-Progress] (2023-07 ~ 2023-12) contribute 6 servers to the community and setup the CICD workflow.
+* [Todo] (2023-10 ~ 2023-12) Pre-built packages push to stalingx mirror (https://mirror.starlingx.cengn.ca/mirror/starlingx/)
+* [Todo] (2023-10 ~ 2023-12) LAT-SDK for ARM64 push to starlingx mirror (http://mirror.starlingx.cengn.ca/mirror/lat-sdk/) 
+* [Todo] (2023-10 ~ 2023-12) All container images for ARM64 push to dockerhub (https://hub.docker.com/u/starlingx)
+* [Todo] (2023-10 ~ 2023-12) DOC: provide documentaions about StarlingX on ARM.
+* [todo] (2023-10 ~ 2023-12) remaining packages source code porting: ice, qemu
+* [Todo] (2023-12 or 2024) Secure boot and other features re-design or adjustment.
 
-Notes: POC level means that there are many hardcodes and workarounds, not good for upstream
+CICD plan (draft):
+* [In-Progress] contribute 6 servers to the community and setup the CICD workflow.
+  * [In-Progress](by the end of 2023-08) Get 6 servers ready from Ampere and send to StarlingX community(WindRiver Lab).
+  * [In-Progress](by the end of 2023-08) Get the CICD setup and deploy docs from StarlingX.
+    * who will help on the CICD setup on ARM platform?
+    * If there is any concret plan on setuping CICD on ARM?
+    * CICD related repos/links that can be ref
+    * How can we access to the CICD env for ARM developers from WindRiver and Arm
+  * [todo](by the end of 2023-10) Setup and deploy CICD tools on the 6 servers hosted by StarlingX community(WindRiver Lab)
+  * [todo](by the end of 2023-12) Test and ensure the CICD workflow work as expected
 
 ## Development summary
 
