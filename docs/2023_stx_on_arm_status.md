@@ -68,7 +68,7 @@
 
 * What next
   * [In-Progress] (2023-07 ~ 2023-08) Enhance the build system to support both x86-64 and ARM64.
-  * [In-Progress] (2023-08) Write StarlingX specifications (HLD) for ARM64 implementations.
+  * [In-Progress] (2023-08 ~ 2023-09) Write StarlingX specifications (HLD) for ARM64 implementations and get it approved.
   * [In-Progress] (2023-08 ~ 2023-10) Work with community with all POC level codes and make them product level, review and push to community.
   * [In-Progress] (2023-07 ~ 2023-12) contribute 6 servers to the community and setup the CICD workflow.
   * [Todo] (2023-10 ~ 2023-12) Pre-built packages push to stalingx mirror (https://mirror.starlingx.cengn.ca/mirror/starlingx/)
