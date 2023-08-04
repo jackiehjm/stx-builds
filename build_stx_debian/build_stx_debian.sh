@@ -48,7 +48,7 @@ STX_ARCH="x86-64"
 
 # Source code fixes for ARM64
 SRC_FIX_URL="https://github.com/jackiehjm"
-SRC_FIX_BRANCH="arm64/20230620-stx-master-native"
+SRC_FIX_BRANCH="arm64/20230725-stx-master-native"
 SRC_FIX_REPOS="\
     cgcs-root \
     stx-tools \
@@ -63,6 +63,8 @@ SRC_FIX_REPOS="\
     stx/ansible-playbooks \
     stx/config \
     stx/nginx-ingress-controller-armada-app \
+    stx/app-istio \
+    stx/virt \
 "
 
 SDK_URL="http://ala-lpggp5:5088/3_open_source/stx/images-arm64/lat-sdk/lat-sdk-build_20230525/AppSDK.sh"
@@ -420,19 +422,6 @@ patch_src () {
     echo_step_end
 }
 
-prepare_lat_sdk () {
-    # This is only needed for ARM64
-    echo_step_start "Prepare LAT-SDK"
-
-    SDK_DIR=${STX_REPO_ROOT}/stx-tools/stx/toCOPY/lat-sdk/
-    mkdir -p ${SDK_DIR}
-    cd ${SDK_DIR}
-    RUN_CMD="wget ${SDK_URL} -O ${SDK_DIR}/AppSDK.sh"
-    run_cmd "Download the ${SDK_URL} to ${SDK_DIR}"
-
-    echo_step_end
-}
-
 init_stx_tool () {
     echo_step_start "Init stx tool"
 
@@ -513,7 +502,4 @@ prepare_workspace
 create_env
 prepare_src
 init_stx_tool
-if [ ${STX_ARCH} = "arm64" ]; then
-    prepare_lat_sdk
-fi
 build_image
