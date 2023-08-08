@@ -379,8 +379,11 @@ patch_src_arm () {
 
         git remote add hjm-github ${SRC_FIX_URL}/${fix_repo}
         git fetch hjm-github
-        git checkout -b ${SRC_FIX_BRANCH} hjm-github/${SRC_FIX_BRANCH}
+        git checkout -b ${SRC_FIX_BRANCH} hjm-github/${SRC_FIX_BRANCH} || true 
     done
+
+    PKG_BUILDER="${STX_REPO_ROOT}/stx-tools/stx/toCOPY/pkgbuilder/debbuilder.conf"
+    sed -i '/@CENGNURL@/ d' ${PKG_BUILDER}
 }
 
 patch_src () {
@@ -446,6 +449,12 @@ init_stx_tool () {
     #stx config --add project.proxyserver 147.11.252.42
     #stx config --add project.proxyport 9090
 
+    if [ ${STX_ARCH} = "arm64" ]; then
+        stx config --add project.debian_snapshot_base http://snapshot.debian.org/archive/debian
+        stx config --add project.debian_security_snapshot_base http://snapshot.debian.org/archive/debian-security
+        stx_config --add repomgr.cengnstrategy upstream_first
+    fi
+
     stx config --show
 
     echo_step_end
@@ -456,7 +465,10 @@ build_image () {
 
     cd ${STX_REPO_ROOT}/stx-tools
     if [ ${STX_ARCH} = "arm64" ]; then
-        RUN_CMD="./stx-init-env --rebuild"
+    	export STX_PREBUILT_BUILDER_IMAGE_PREFIX=stx4arm/
+    	export STX_PREBUILT_BUILDER_IMAGE_TAG=master-20230625
+        #RUN_CMD="./stx-init-env --rebuild"
+        RUN_CMD="./stx-init-env"
     else
         RUN_CMD="./stx-init-env"
     fi
