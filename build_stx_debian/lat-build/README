@@ -1,0 +1,44 @@
+The script build-lat.sh is used to build lat-sdk.sh for StarlingX
+Debian, which is the sdk used to build-image.
+
+----------How to use build-sdk.sh----------
+Use on the builder container of StarlingX Debian:
+  git config --global user.name 'Example';
+  git config --global user.email Example_Email@xxx.com;
+  <The full path of this script>/build-sdk.sh [Don't use relative path]
+
+Pay attention: please update the [downloading sites] to the nearest
+sites to your building server, or else it will affect the code
+downloading time greatly and maybe cause failures.
+e.g.
+In build-lat.sh, choose the settings in below code:
+# ===Set code downloading sites===
+# Build on ala server
+WRL_GIT_PATH=git://lxgit.wrs.com/wrlinux-x
+URL_META_LAT=https://github.com/Wind-River/meta-lat.git
+LAT_STX_BRANCH=STARLINGX-9.0
+# Build on pek server
+# WRL_GIT_PATH=git://pek-git.wrs.com/wrlinux-x
+# URL_META_LAT=git://pek-git.wrs.com/layers/meta-lat.git
+# LAT_STX_BRANCH=upstream-STARLINGX-9.0
+
+----------How to use new sdk---------------
+The build-sdk.sh runs on StarlingX Debian builder container, and
+it will create a LAT sdk under
+${LAT_BUILD_PATH}/lat_stx_*/prj/build/tmp-glibc/deploy/sdk
+named as wrlinux-graphics-*-glibc-x86_64-intel_x86_64-container-base-sdk.sh.
+
+This is the way to use the new sh file for LAT sdk:
+  rename it to lat-sdk.sh and put it onto a http server;
+  update the address of lat-sdk.sh in LAT_BINARY_RESOURCE_PATH var accordingly
+    which is located at: tools/stx/dockerfiles/stx-lat-tool.Dockerfile;
+  run "stx-init-env --rebuild" to rebuild the containers;
+  reenter the builder container by running "stx shell";
+  then "build-image" will use the new lat-sdk.sh to build.
+
+----------How to debug meta-lat-------------
+If want to debug meta-lat, this way can be used:
+  goto the same dir with build-lat.sh;
+  mkdir meta-lat;
+  put the debugging patch for meta-lat layer under this new dir;
+  run build-lat.sh again.
