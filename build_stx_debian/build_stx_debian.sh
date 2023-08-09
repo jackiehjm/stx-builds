@@ -452,7 +452,7 @@ init_stx_tool () {
     if [ ${STX_ARCH} = "arm64" ]; then
         stx config --add project.debian_snapshot_base http://snapshot.debian.org/archive/debian
         stx config --add project.debian_security_snapshot_base http://snapshot.debian.org/archive/debian-security
-        stx_config --add repomgr.cengnstrategy upstream_first
+        stx config --add repomgr.cengnstrategy upstream_first
     fi
 
     stx config --show
