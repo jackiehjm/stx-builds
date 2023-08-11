@@ -452,7 +452,11 @@ init_stx_tool () {
     if [ ${STX_ARCH} = "arm64" ]; then
         stx config --add project.debian_snapshot_base http://snapshot.debian.org/archive/debian
         stx config --add project.debian_security_snapshot_base http://snapshot.debian.org/archive/debian-security
-        stx config --add repomgr.cengnstrategy upstream_first
+
+	# options: cengn_first(default), cengn, upstream_first, upstream
+	# For now, there is no any packages for ARM on cengn, so only opiton
+	# can be used is "upstream"
+        stx config --add repomgr.cengnstrategy upstream
     fi
 
     stx config --show
