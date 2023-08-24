@@ -470,7 +470,7 @@ build_image () {
     cd ${STX_REPO_ROOT}/stx-tools
     if [ ${STX_ARCH} = "arm64" ]; then
     	export STX_PREBUILT_BUILDER_IMAGE_PREFIX=stx4arm/
-    	export STX_PREBUILT_BUILDER_IMAGE_TAG=master-20230625
+    	export STX_PREBUILT_BUILDER_IMAGE_TAG=master-20230823
         #RUN_CMD="./stx-init-env --rebuild"
         RUN_CMD="./stx-init-env"
     else
