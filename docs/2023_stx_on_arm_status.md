@@ -37,8 +37,8 @@
 
 ## Overall status (What was done and what’s next?)
 
-* What was done by 2023-08-02
-  * [Done] Build StarlingX 8 on native ARM (not cross build).
+* What was done by 2023-08-23
+  * [Done] Build StarlingX master on native ARM (not cross build).
   * [95% Done] Packages and container images porting.
     * Failed pkg: ice modules, qemu
     * Skipped feature: secure boot
