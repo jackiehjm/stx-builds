@@ -37,8 +37,11 @@
 
 ## Overall status (What was done and what’s next?)
 
-* What was done by 2023-08-23
-  * [Done] Build StarlingX master on native ARM (not cross build).
+* Ongoing reviews:
+  * https://review.opendev.org/q/topic:arm64/20230725-stx-master-native
+
+* What was done by 2023-10-08
+  * [Done] Build StarlingX 8 on native ARM (not cross build).
   * [95% Done] Packages and container images porting.
     * Failed pkg: ice modules, qemu
     * Skipped feature: secure boot
@@ -66,17 +69,35 @@
     * DC (AIO-DX for Central + 2 sub-cloud with AIO-SX): VM
     * DC (AIO-DX-LL for Central + 2 sub-cloud with AIO-SX-LL): VM
 
+* What real HW has been tested?
+  * HPE ProLiant RL300 Gen11​
+    * CPU: Ampere(R) Altra(R) Processor 3000MHz 80/80 cores​
+    * Memory: 16G(DDR4 3200MHz) x 16 = 256G​
+    * Disk: NVMe SSD 2T​
+    * Network: Mellanox MT2894 Family [ConnectX-6 Lx] Adapter​
+  * SuperMicro R12SPD-A (only tested with AIO-SX for now)​
+    * CPU: Ampere(R) Altra(R) Processor 3000MHz 80/80 cores​
+    * Memory: 32G(DDR4 3200MHz) x 16 = 512G​
+    * Disk: NVMe SSD 1T​
+    * Network: Mellanox Technologies MT27710 Family [ConnectX-4 Lx]​
+    * Accelerator: NVIDIA A100X Converged Accelerator​
+Notes: There is a known issue for SuperMicro, which needs workaround on ISO installation.
+
 * What next
-  * [In-Progress] (2023-07 ~ 2023-08) Enhance the build system to support both x86-64 and ARM64.
-  * [In-Progress] (2023-08 ~ 2023-09) Write StarlingX specifications (HLD) for ARM64 implementations and get it approved.
-  * [In-Progress] (2023-08 ~ 2023-10) Work with community with all POC level codes and make them product level, review and push to community.
+  * [Done] (2023-07 ~ 2023-08) Enhance the build system to support both x86-64 and ARM64.
+  * [In-Progress] (2023-08 ~ 2023-11) Write StarlingX specifications (HLD) for ARM64 implementations and get it approved.
+  * [In-Progress] (2023-10 ~ 2023-12) Work with community with all POC level codes and make them product level, review and push to community.
   * [In-Progress] (2023-07 ~ 2023-12) contribute 6 servers to the community and setup the CICD workflow.
-  * [Todo] (2023-10 ~ 2023-12) Pre-built packages push to stalingx mirror (https://mirror.starlingx.cengn.ca/mirror/starlingx/)
-  * [Todo] (2023-10 ~ 2023-12) LAT-SDK for ARM64 push to starlingx mirror (http://mirror.starlingx.cengn.ca/mirror/lat-sdk/) 
-  * [Todo] (2023-10 ~ 2023-12) All container images for ARM64 push to dockerhub (https://hub.docker.com/u/starlingx)
-  * [Todo] (2023-10 ~ 2023-12) DOC: provide documentaions about StarlingX on ARM.
-  * [todo] (2023-10 ~ 2023-12) remaining packages source code porting: ice, qemu
+  * [In-Progress] (2023-10 ~ 2023-12) DOC: provide documentations about StarlingX on ARM.​
+  * [In-Progress] (2023-10 ~ 2024-02) Joint demos with RAN application vendors for MWC24.
+  * [Todo] (2023-11 ~ 2023-12) Goden Testsuite for the RAN application on StarlingX on ARM.
+  * [Todo] (2023-12 or 2024) Pre-built packages push to stalingx mirror (https://mirror.starlingx.cengn.ca/mirror/starlingx/)
+  * [Todo] (2023-12 or 2024) LAT-SDK for ARM64 push to starlingx mirror (http://mirror.starlingx.cengn.ca/mirror/lat-sdk/) 
+  * [Todo] (2023-12 or 2024) All container images for ARM64 push to dockerhub (https://hub.docker.com/u/starlingx)
+  * [todo] (2023-12 or 2024) remaining packages source code porting: ice, qemu
   * [Todo] (2023-12 or 2024) Secure boot and other features re-design or adjustment.
+
+Notes: The remaining work items are highly dependent on the interaction with the community, the community's reaction has lagged behind our expectation, and we have difficulties in moving on the Spec/HLD review and the CICD workflow, it's likely that some of items will be delayed to next year.​
 
 ## Detail Plan and Status (What was done and what’s next?)
 
@@ -178,51 +199,48 @@ CICD plan (draft):
   * part 6: LAT-SDK: need to add logic to remove the hardcodes and support both x86 and arm64
   * part 7: container-images: some images only have x86 version, need to re-build for arm64 and push to differnet place, how to handle different images url
 
-* CICD:
-  * how/who to setup CICD pipe line after the servers are ready
-
 ## Development details
 
 ### Commits for fixes and workarounds
 
-* RR for part1: https://review.opendev.org/q/topic:arm64%252F20230620-stx-master-native
-
-Notes: many chages are hard-coded and workarounds for arm64 native builds.
+* Reviews: https://review.opendev.org/q/topic:arm64/20230725-stx-master-native
 
 * Fixes and workarounds for stx-tools(22 commits):
-  * https://github.com/starlingx/tools/compare/master...jackiehjm:stx-tools:arm64/20230620-stx-master-native
+  * https://github.com/starlingx/tools/compare/master...jackiehjm:stx-tools:arm64/20230725-stx-master-native
 
 * Fixes and workdournad for cgcs-root/build-tools(4 commits):
-  * https://github.com/starlingx/root/compare/master...jackiehjm:stx-cgcs-root:arm64/20230620-stx-master-native
+  * https://github.com/starlingx/root/compare/master...jackiehjm:stx-cgcs-root:arm64/20230725-stx-master-native
 
 * Fixes for packages:
   * stx-integ(14 commits):
-    * https://github.com/starlingx/integ/compare/master...jackiehjm:stx-integ:arm64/20230620-stx-master-native
+    * https://github.com/starlingx/integ/compare/master...jackiehjm:stx-integ:arm64/20230725-stx-master-native
   * stx-utilities(1 commit):
-    * https://github.com/starlingx/utilities/compare/master...jackiehjm:stx-utilities:arm64/20230620-stx-master-native
+    * https://github.com/starlingx/utilities/compare/master...jackiehjm:stx-utilities:arm64/20230725-stx-master-native
   * stx-fault(1 commit):
-    * https://github.com/starlingx/fault/compare/master...jackiehjm:stx-fault:arm64/20230620-stx-master-native
+    * https://github.com/starlingx/fault/compare/master...jackiehjm:stx-fault:arm64/20230725-stx-master-native
   * stx-containers(1 commit):
-    * https://github.com/starlingx/containers/compare/master...jackiehjm:stx-containers:arm64/20230620-stx-master-native
+    * https://github.com/starlingx/containers/compare/master...jackiehjm:stx-containers:arm64/20230725-stx-master-native
   * stx-ha(2 commits):
-    * https://github.com/starlingx/ha/compare/master...jackiehjm:stx-ha:arm64/20230620-stx-master-native
+    * https://github.com/starlingx/ha/compare/master...jackiehjm:stx-ha:arm64/20230725-stx-master-native
   * stx-kernel(19 commits):
-    * https://github.com/starlingx/kernel/compare/master...jackiehjm:stx-kernel:arm64/20230620-stx-master-native
+    * https://github.com/starlingx/kernel/compare/master...jackiehjm:stx-kernel:arm64/20230725-stx-master-native
   * stx-metal(6 commits):
-    * https://github.com/starlingx/metal/compare/master...jackiehjm:stx-metal:arm64/20230620-stx-master-native
+    * https://github.com/starlingx/metal/compare/master...jackiehjm:stx-metal:arm64/20230725-stx-master-native
   * stx-ansible-playbooks(6 commits):
-    * https://github.com/starlingx/ansible-playbooks/compare/master...jackiehjm:stx-ansible-playbooks:arm64/20230620-stx-master-native
+    * https://github.com/starlingx/ansible-playbooks/compare/master...jackiehjm:stx-ansible-playbooks:arm64/20230725-stx-master-native
   * stx-config(1 commit):
-    * https://github.com/starlingx/config/compare/master...jackiehjm:stx-config:arm64/20230620-stx-master-native
+    * https://github.com/starlingx/config/compare/master...jackiehjm:stx-config:arm64/20230725-stx-master-native
   * stx-puppet(1 commit):
-    * https://github.com/starlingx/stx-puppet/compare/master...jackiehjm:stx-puppet:arm64/20230620-stx-master-native
+    * https://github.com/starlingx/stx-puppet/compare/master...jackiehjm:stx-puppet:arm64/20230725-stx-master-native
   * stx-nginx-ingress-controller-armada-app(1 commit):
-    * https://github.com/starlingx/nginx-ingress-controller-armada-app/compare/master...jackiehjm:stx-nginx-ingress-controller-armada-app:arm64/20230620-stx-master-native
+    * https://github.com/starlingx/nginx-ingress-controller-armada-app/compare/master...jackiehjm:stx-nginx-ingress-controller-armada-app:arm64/20230725-stx-master-native
   * stx-app-istio
-    * https://github.com/jackiehjm/stx-app-istio/compare/master...arm64/20230620-stx-master-native
+    * https://github.com/jackiehjm/stx-app-istio/compare/master...arm64/20230725-stx-master-native
+  * stx-virt
+    * https://github.com/jackiehjm/stx-virt/compare/master...arm64/20230725-stx-master-native
 
 * Fixes and workarounds for LAT(5 commits):
-  * https://github.com/jackiehjm/wrl-meta-lat/compare/wr-10.cd-20230210...jackiehjm:wrl-meta-lat:arm64/20230620-stx-master-native
+  * https://github.com/jackiehjm/wrl-meta-lat/compare/wr-10.cd-20230210...jackiehjm:wrl-meta-lat:arm64/20230725-stx-master-native
   * Built SDK on ARM64 server with the commits:
     * http://ala-lpggp5:5088/3_open_source/stx/images-arm64/lat-sdk/lat-sdk-build_20230301/wrlinux-graphics-10.23.09.0-glibc-aarch64-qemuarm64-container-base-sdk.sh
 
