@@ -2,6 +2,18 @@
 
 ## Test reulsts
 
+
+### Test result matrix
+
+| #   | Host       | CPU                          | Mem  | Deployment       | isolated cores | tested cores | tested threads | Max |
+| --- | ---------- | ---------------------------- | ---- | ---------------- | -------------- | ------------ | -------------- | --- |
+| 1   | HPE RL300  | Ampere Altra 3000MHz 80cores | 256G | StarlingX AIO-SX | 8-63           | 32-55        | 24             | 4us |
+| 2   | HPE RL300  | Ampere Altra 3000MHz 80cores | 256G | StarlingX AIO-SX | 8-63           | 8-63         | 56             | 7us |
+| 3   | HPE RL300  | Ampere Altra 3000MHz 80cores | 256G | StarlingX AIO-SX | 8-63           | 8-63         | 56             | 5us |
+| 4   | HPE RL300  | Ampere Altra 3000MHz 80cores | 256G | StarlingX AIO-SX | 8-63           | 8-63         | 56             | 6us |
+| 5   | SuperMicro | Ampere Altra 3000MHz 80cores | 512G | StarlingX AIO-SX | 8-63           | 8-63         | 56             | 7us |
+| 6   | SuperMicro | Ampere Altra 3000MHz 80cores | 512G | StarlingX AIO-SX | 8-63           | 8-63         | 56             | 6us |
+
 ### Testing command
 
 ```
@@ -16,17 +28,6 @@
 #     with NUM pin all threads to the processor NUM
 cyclictest -l100000000 -m -p90 -i200 -h50 -t $cores -a ${c_start}-${c_end}
 ```
-
-### Test result matrix
-
-| #   | Host       | CPU                          | Mem  | Deployment       | isolated cores | tested cores | tested threads | Max |
-| --- | ---------- | ---------------------------- | ---- | ---------------- | -------------- | ------------ | -------------- | --- |
-| 1   | HPE RL300  | Ampere Altra 3000MHz 80cores | 256G | StarlingX AIO-SX | 8-63           | 32-55        | 24             | 4us |
-| 2   | HPE RL300  | Ampere Altra 3000MHz 80cores | 256G | StarlingX AIO-SX | 8-63           | 8-63         | 56             | 7us |
-| 3   | HPE RL300  | Ampere Altra 3000MHz 80cores | 256G | StarlingX AIO-SX | 8-63           | 8-63         | 56             | 5us |
-| 4   | HPE RL300  | Ampere Altra 3000MHz 80cores | 256G | StarlingX AIO-SX | 8-63           | 8-63         | 56             | 6us |
-| 5   | SuperMicro | Ampere Altra 3000MHz 80cores | 512G | StarlingX AIO-SX | 8-63           | 8-63         | 56             | 7us |
-| 6   | SuperMicro | Ampere Altra 3000MHz 80cores | 512G | StarlingX AIO-SX | 8-63           | 8-63         | 56             | 6us |
 
 ### Test result plots
 
