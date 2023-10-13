@@ -299,7 +299,6 @@ BOOT_IMAGE=/1/vmlinuz-5.10.0-6-rt-arm64 rw rootwait ostree_boot=LABEL=otaboot os
 
 ```
 sudo ostree admin unlock --hotfix
-#wget http://ports.ubuntu.com/pool/universe/r/rt-tests/rt-tests_1.5-2_arm64.deb
 wget https://ftp.up.pt/pub/debian/pool/main/r/rt-tests/rt-tests_1.5-2_arm64.deb
 sudo dpkg -i rt-tests_1.5-2_arm64.deb
 ```
