@@ -13,6 +13,7 @@
 | 4   | HPE RL300  | Ampere Altra 3000MHz 80cores | 256G | StarlingX AIO-SX | 8-63           | 8-63         | 56             | 6us |
 | 5   | SuperMicro | Ampere Altra 3000MHz 80cores | 512G | StarlingX AIO-SX | 8-63           | 8-63         | 56             | 7us |
 | 6   | SuperMicro | Ampere Altra 3000MHz 80cores | 512G | StarlingX AIO-SX | 8-63           | 8-63         | 56             | 6us |
+| 7   | SuperMicro | Ampere Altra 3000MHz 80cores | 512G | StarlingX AIO-SX | 8-63           | 8-63         | 56             | 7us |
 
 ### Testing command
 
@@ -37,6 +38,7 @@ cyclictest -l100000000 -m -p90 -i200 -h50 -t $cores -a ${c_start}-${c_end}
 ![HPE cyclictest result 4](./20231010_stx_on_arm_rt_cyclictest/hpe_cyclictest_plot_20231011.png)
 ![SuperMicro cyclictest result 1](./20231010_stx_on_arm_rt_cyclictest/super_cyclictest_plot_20231011.png)
 ![SuperMicro cyclictest result 2](./20231010_stx_on_arm_rt_cyclictest/super_cyclictest_plot_20231012.png)
+![SuperMicro cyclictest result 3](./20231010_stx_on_arm_rt_cyclictest/super_cyclictest_plot_20231013.png)
 
 ## Test Steps
 
