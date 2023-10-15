@@ -14,6 +14,7 @@
 | 5   | SuperMicro | Ampere Altra 3000MHz 80cores | 512G | StarlingX AIO-SX | 8-63           | 8-63         | 56             | 7us |
 | 6   | SuperMicro | Ampere Altra 3000MHz 80cores | 512G | StarlingX AIO-SX | 8-63           | 8-63         | 56             | 6us |
 | 7   | SuperMicro | Ampere Altra 3000MHz 80cores | 512G | StarlingX AIO-SX | 8-63           | 8-63         | 56             | 7us |
+| 8   | SuperMicro | Ampere Altra 3000MHz 80cores | 512G | StarlingX AIO-SX | 8-63           | 8-63         | 56             | 7us |
 
 ### Testing command
 
