@@ -15,6 +15,7 @@
 | 6   | SuperMicro | Ampere Altra 3000MHz 80cores | 512G | StarlingX AIO-SX | 8-63           | 8-63         | 56             | 6us |
 | 7   | SuperMicro | Ampere Altra 3000MHz 80cores | 512G | StarlingX AIO-SX | 8-63           | 8-63         | 56             | 7us |
 | 8   | SuperMicro | Ampere Altra 3000MHz 80cores | 512G | StarlingX AIO-SX | 8-63           | 8-63         | 56             | 7us |
+| 9   | SuperMicro | Ampere Altra 3000MHz 80cores | 512G | StarlingX AIO-SX | 8-63           | 8-63         | 56             | 6us |
 
 ### Testing command
 
@@ -28,7 +29,14 @@
 # -t: number of threads
 # -a: run thread #N on processor #N, if possible
 #     with NUM pin all threads to the processor NUM
+
+# for v1.50
 cyclictest -l100000000 -m -p90 -i200 -h50 -t $cores -a ${c_start}-${c_end}
+
+# for v2.60
+#  --mainaffinity=CPUSET
+#    Run the main thread on CPU #N. This only affects the main thread and not the measurement threads
+cyclictest -l100000000 -m -p90 -i200 -h50 -t $cores -a ${c_start}-${c_end} --mainaffinity=0
 ```
 
 ### Test result plots
@@ -40,6 +48,8 @@ cyclictest -l100000000 -m -p90 -i200 -h50 -t $cores -a ${c_start}-${c_end}
 ![SuperMicro cyclictest result 1](./20231010_stx_on_arm_rt_cyclictest/super_cyclictest_plot_20231011.png)
 ![SuperMicro cyclictest result 2](./20231010_stx_on_arm_rt_cyclictest/super_cyclictest_plot_20231012.png)
 ![SuperMicro cyclictest result 3](./20231010_stx_on_arm_rt_cyclictest/super_cyclictest_plot_20231013.png)
+![SuperMicro cyclictest result 4](./20231010_stx_on_arm_rt_cyclictest/super_cyclictest_plot_20231014.png)
+![SuperMicro cyclictest result 5](./20231010_stx_on_arm_rt_cyclictest/super_cyclictest_plot_20231026.png)
 
 ## Test Steps
 
