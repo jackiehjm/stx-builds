@@ -35,6 +35,7 @@ STX_SRC_BRANCH_SUPPORTED="\
     WRCP_22.12 \
     WRCP_22.12_PATCHING \
     WRCP_22.12_PRESTAGING \
+    TC_DEV_0008 \
 "
 STX_SRC_BRANCH="master"
 STX_MANIFEST_URL="https://opendev.org/starlingx/manifest"
@@ -183,9 +184,10 @@ if [ -z ${WORKSPACE} ]; then
     WORKSPACE=`readlink -f workspace`
 fi
 
-if [[ ${STX_SRC_BRANCH} =~ "WRCP" ]]; then
+if [[ ${STX_SRC_BRANCH} =~ "WRCP" || ${STX_SRC_BRANCH} =~ "TC_DEV" ]]; then
     STX_MANIFEST_URL=${STX_MANIFEST_URL_WRCP}
 fi
+
 
 #########################################################################
 # Functions for each step
