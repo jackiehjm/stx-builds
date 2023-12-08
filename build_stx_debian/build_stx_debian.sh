@@ -385,7 +385,7 @@ patch_src_arm () {
     done
 
     PKG_BUILDER="${STX_REPO_ROOT}/stx-tools/stx/toCOPY/pkgbuilder/debbuilder.conf"
-    sed -i '/@CENGNURL@/ d' ${PKG_BUILDER}
+    sed -i '/@STX_MIRROR_URL@/ d' ${PKG_BUILDER}
 }
 
 patch_src () {
