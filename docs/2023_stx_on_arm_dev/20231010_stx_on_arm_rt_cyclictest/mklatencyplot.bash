@@ -6,7 +6,7 @@ c_end=63
 cores=`expr $c_end - $c_start + 1`
 
 # 2. Run cyclictest
-cyclictest -l100000000 -m -p90 -i200 -h50 -t $cores -a ${c_start}-${c_end} -q --histfile output 
+./cyclictest -l100000000 -m -p90 -i200 -h50 -t $cores -a ${c_start}-${c_end} -q --mainaffinity=0 --histfile output 
 
 # 3. Get maximum latency
 max=`grep "Max Latencies" output | tr " " "\n" | sort -n | tail -1 | sed s/^0*//`
