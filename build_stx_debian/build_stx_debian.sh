@@ -63,7 +63,6 @@ SRC_FIX_REPOS="\
     stx/utilities \
     stx/fault \
     stx/containers \
-    stx/ha \
     stx/kernel \
     stx/metal \
     stx/ansible-playbooks \
