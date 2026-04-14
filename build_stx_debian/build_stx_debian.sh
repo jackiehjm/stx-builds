@@ -41,6 +41,7 @@ STX_SRC_BRANCH_SUPPORTED="\
     WRCP_22.12_MR2_PATCHING \
     WRCP_22.12_MR2PLUS_PATCHING \
     WRCP_22.12_MR2PLUS_PRESTAGING \
+    WRCP_25.09_PATCHING \
 "
 STX_SRC_BRANCH="master"
 STX_MANIFEST_URL="https://opendev.org/starlingx/manifest"
@@ -329,8 +330,8 @@ EOF
     if [[ ${HOST} =~ "pek-" ]]; then
         cat << EOF >> ${WORKSPACE}/${ENV_FILENAME}
 
-export http_proxy=http://147.11.252.42:9090
-export https_proxy=http://147.11.252.42:9090
+export http_proxy=http://128.224.237.250:3128
+export https_proxy=http://128.224.237.250:3128
 export no_proxy=localhost,127.0.0.1,10.96.0.0/12,192.168.0.0/16
 
 EOF
@@ -475,7 +476,7 @@ patch_src () {
 
     if [[ ${HOST} =~ "pek-" ]]; then
     	sed -i '/^FROM/a \
-    	    \n# Proxy configuration\nENV https_proxy "http://147.11.252.42:9090"\n' \
+    	    \n# Proxy configuration\nENV https_proxy "http://128.224.237.250:3128"\n' \
     	    ${STX_REPO_ROOT}/stx-tools/stx/dockerfiles/stx*Dockerfile
     fi
 
